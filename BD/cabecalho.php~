@@ -17,7 +17,7 @@
 				"tipo"=>"Tipo de Doação",
 				"historico_atendimento"=>"Histórico de Atendimento",
 				"postagem"=>"Postagem",
-				"comentario"=>"Comentário",
+				"comentario"=>"Comentário"
 				"logout"=> "Logout"
 				);
 				

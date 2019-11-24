@@ -18,10 +18,9 @@
 		$c = new ControllerBD($conexao);
 		$colunas = array("ID_ANIMAL", "NOME", "IDADE", "OBSERVACAO", "ID_LOGIN", "ID_RACA");
 		$tabelas[0][0] = "ANIMAL";
-		$tabelas[0][1] = "RACA";
-		$tabelas[0][1] = "ANIMAL";
-		$tabelas[0][1] = "LOGIN";
-	
+		$tabelas[0][1] = null;
+		//$tabelas[1][0] = "animal";
+		//$tabelas[1][1] = "raca";
 		$ordenacao = null;
 		$condicao = $_POST["id"];
 
@@ -118,13 +117,13 @@
 		// 2: veterinario
 		// 3: usr
 		if($_SESSION["login"]["permissao"] == 1){
-			echo "permissao=1;";
+			echo "permissao=2";
 		}
 		else if($_SESSION["login"]["permissao"] == 2){
-			echo "permissao=2;";
+			echo "permissao=2";
 		}
 		else{
-			echo "permissao=3;";
+			echo "permissao=1";
 		}
 	?>
 	pagina_atual = 1;
@@ -140,7 +139,7 @@
 					type: "post",
 					data: {tabela: "ANIMAL"},
 					success: function(q){
-						//console.log(q);
+						console.log(q);
 						$("#botoes").html("");
 						for(i=1;i<=q;i++){
 							botao = " <button type='button' class='pg'>" + i + "</button>";
@@ -186,15 +185,14 @@
 					url: "carrega_dados.php",
 					type: "post",
 					data: {
-							tabelas: {
-								0:{0:"ANIMAL", 1:"RACA"},
-								1:{0:"ANIMAL", 1:"LOGIN"}
-								},	
-							colunas:{0:"ID_ANIMAL",1:"ANIMAL.NOME as NOME",2:"IDADE",3:"OBSERVACAO",4:"LOGIN.NOME as LOGIN",5:"RACA.NOME AS RACA"},
+							tabelas:{
+										0:{0:"ANIMAL",1:null}
+									},
+							colunas:{0:"ID_ANIMAL",1:"NOME",2:"IDADE",3:"OBSERVACAO",4:"ID_LOGIN",5:"ID_RACA"},
 							pagina: b
 						  },
 					success: function(matriz){
-						console.log(matriz);
+						
 						$("tbody").html("");
 						for(i=0;i<matriz.length;i++){
 							tr = "<tr>";
@@ -202,12 +200,11 @@
 							tr += "<td>"+matriz[i].NOME+"</td>";
 							tr += "<td>"+matriz[i].IDADE+"</td>";
 							tr += "<td>"+matriz[i].OBSERVACAO+"</td>";
-							tr += "<td>"+matriz[i].LOGIN+"</td>";
-							tr += "<td>"+matriz[i].RACA+"</td>";
+							tr += "<td>"+matriz[i].ID_LOGIN+"</td>";
+							tr += "<td>"+matriz[i].ID_RACA+"</td>";
 							tr += "<td><button value='"+matriz[i].ID_ANIMAL+"' class='remover'>Remover</button>";
 							tr += "<button value='"+matriz[i].ID_ANIMAL+"' class='alterar'>Alterar</button></td>";
 							tr += "</tr>";	
-							
 							$("tbody").append(tr);
 						}
 					}
@@ -226,8 +223,8 @@
 						$("input[name='NOME']").val(dados.NOME);
 						$("input[name='IDADE']").val(dados.IDADE);
 						$("input[name='OBSERVACAO']").val(dados.OBSERVACAO);
-						$("select[name='ID_LOGIN']").val(dados.ID_LOGIN);
-						$("select[name='ID_RACA']").val(dados.ID_RACA);
+						$("input[name='ID_LOGIN']").val(dados.ID_LOGIN);
+						$("input[name='ID_RACA']").val(dados.ID_RACA);
 						$(".cadastrar").attr("class","alterando");
 						$(".alterando").html("ALTERAR");
 					}
@@ -244,8 +241,8 @@
 							NOME: $("input[name='NOME']").val(),
 							IDADE: $("input[name='IDADE']").val(),
 							OBSERVACAO: $("input[name='OBSERVACAO']").val(),
-							ID_LOGIN: $("select[name='ID_LOGIN']").val(),
-							ID_RACA: $("select[name='ID_RACA']").val()
+							ID_LOGIN: $("input[name='ID_LOGIN']").val(),
+							ID_RACA: $("input[name='ID_RACA']").val()
 						 },
 						beforeSend:function(){
 							$("button").attr("disabled",true);
@@ -293,7 +290,6 @@
 						$("button").attr("disabled",true);
 					},
 					success: function(d){
-						console.log(d);
 						$("button").attr("disabled",false);
 						if(d=='1'){
 							$("#status").html("Animal inserido com sucesso!");

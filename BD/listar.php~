@@ -37,9 +37,6 @@
 	else if($_GET["t"]=="historico_atendimento"){
 		require_once("form_historico_atendimento.php");
 	}
-	else if($_GET["t"]=="logout"){
-		require_once("logout.php");
-	}
 	
 	$c = new ControllerBD($conexao);
 	
@@ -50,7 +47,6 @@
 	}
 	var_dump($matriz);
 	var_dump($t);
-	var_dump($colunas);
 	$t = new Tabela($matriz,$t[0][0]);
 	$t->exibe();
 ?>

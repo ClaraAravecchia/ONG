@@ -27,7 +27,7 @@
 			}
 			
 			$update .= " WHERE id_$tabela=:id_$tabela";
-			
+		
 			$stmt= $this->conexao->prepare($update);
 			
 			foreach($campos as $coluna=>$valor){
@@ -138,11 +138,11 @@
 				$sql .= " $limite";
 			}
 			
-			//die($sql);
+			die($sql);
 			$stmt = $this->conexao->prepare($sql);
 			
 			$stmt->execute();
-			
+
 			return($stmt);
 		}
 		

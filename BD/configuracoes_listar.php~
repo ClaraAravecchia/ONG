@@ -51,27 +51,28 @@ if(isset($_GET["t"])){
 	else if($_GET["t"]=="raca"){
 		
 		$colunas = array(   "ID_RACA as 'ID'",
-							"RACA.NOME as 'NOME'",
-							"ESPECIE.NOME as 'ESPECIE'"
+							"NOME as 'NOME'",
+							"ID_ESPECIE as 'ESPECIE'"
 						);				
 				$t[0][0] = "RACA";
-				$t[0][1] = "ESPECIE";
+				$t[0][1] = null;//"ESPECIE";
 			
 	}
 	
 	else if($_GET["t"]=="animal"){
 		
 		$colunas = array(   "ID_ANIMAL as ID",
-							"ANIMAL.NOME as NOME",
+							"NOME as NOME",
 							"IDADE as IDADE",
 							"OBSERVACAO as 'OBSERVAÇÃO'",
-							"RACA.NOME as 'RAÇA'",
-							"LOGIN.NOME as 'LOGIN'"
+							"ID_LOGIN as 'LOGIN'",
+							"ID_RACA as 'RAÇA'"
 						);
 				$t[0][0] = "ANIMAL";
-				$t[0][1] = "RACA";
-				$t[1][0] = "ANIMAL";
-				$t[1][1] = "LOGIN";
+				$t[0][1] = null;
+				//$t[0][1] = "LOGIN";
+				//$t[1][0] = "ANIMAL";
+				//$t[1][1] = "RACA";
 	}
 	
 	else if($_GET["t"]=="postagem"){
@@ -92,16 +93,6 @@ if(isset($_GET["t"])){
 							"ID_HISTORICO_ATENDIMENTO as 'HISTORICO DE ATENDIMENTO'"
 						);
 				$t[0][0] = "CONSULTA";
-				$t[0][1] = null;//"LOGIN";
-	}
-	else if($_GET["t"]=="comentario"){
-		
-		$colunas = array(   "ID_COMENTARIO as ID",
-							"TEXTO as CONTEÙDO",
-							"DATA_COMENTARIO as 'DATA'",
-							"ID_POSTAGEM as 'ID DA POSTAGEM'"
-						);
-				$t[0][0] = "COMENTARIO";
 				$t[0][1] = null;//"LOGIN";
 	}
 }

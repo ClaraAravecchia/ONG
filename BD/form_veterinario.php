@@ -1,4 +1,6 @@
-<?php
+<?php error_reporting(-1);
+
+    ini_set("display_errors", 1); 
 	require_once("../classeLayout/classeCabecalhoHTML.php");
 	require_once("cabecalho.php");
 	
@@ -12,7 +14,7 @@
 
 		$c = new ControllerBD($conexao);
 		$colunas = array("ID_VETERINARIO", "NOME", "ENDERECO", "TELEFONE", "CRV");
-		$tabelas[0][0] = "veterinario";
+		$tabelas[0][0] = "VETERINARIO";
 		$tabelas[0][1] = null;
 		$ordenacao = null;
 		$condicao = $_POST["id"];
@@ -139,7 +141,7 @@ pagina_atual = 1;
 						tabelas:{
 									0:{0:"VETERINARIO",1:null}
 								},
-						colunas:{0:"ID_VETERINARIO",1:"NOME",3:"ENDERECO",4:"TELEFONE","CRV"}, 
+						colunas:{0:"ID_VETERINARIO",1:"NOME",3:"ENDERECO",4:"TELEFONE",5:"CRV"}, 
 						pagina: b
 					  },
 				success: function(matriz){
@@ -186,7 +188,7 @@ pagina_atual = 1;
 					url:"altera.php?tabela=VETERINARIO",
 					type: "post",
 					data: {
-						ID_LOGIN: $("input[name='ID_VETERINARIO']").val(),
+						ID_VETERINARIO: $("input[name='ID_VETERINARIO']").val(),
 						NOME: $("input[name='NOME']").val(),
 						ENDERECO: $("input[name='ENDERECO']").val(),
 						TELEFONE: $("input[name='TELEFONE']").val(),

@@ -1,34 +1,33 @@
 <?php
-
-	class Input {//implements Exibicao{
+	//require_once("InterfaceExibicao.php");
+	
+	class Input implements Exibicao{
 		private $type;
 		private $name;
 		private $placeholder;
-		private $value;
-		private $disabled=false;
+		//private $label;
 		
 		public function __construct($vetor){
 			$this->type=$vetor["type"];
-			$this->name=$vetor["name"];			
-			$this->value=$vetor["value"];
+			$this->name=$vetor["name"];
 			if(isset($vetor["placeholder"])){
 				$this->placeholder=$vetor["placeholder"];
 			}
-			if(isset($vetor["disabled"])){
-				$this->disabled = $vetor["disabled"];
+			if(isset($vetor["value"])){
+				$this->value=$vetor["value"];
 			}
-			
+			//$this->label=$vetor["label"];
 		}
 		
 		public function exibe(){
 			echo 
 			"<input type='$this->type'
-					name='$this->name' value='$this->value' ";
+					name='$this->name' ";
 			if($this->placeholder!=null){
 				echo "placeholder='$this->placeholder' ";
 			}
-			if($this->disabled){
-				echo "disabled ";
+			if($this->value!=null){
+				echo "value='$this->value' ";
 			}
 			echo " />";
 		}

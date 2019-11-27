@@ -8,7 +8,6 @@
 	require_once("conexao.php");
 	require_once("classeControllerBD.php");
 	
-	require_once("configuracoes_listar.php");
 	
 	if($_GET["t"]=="login"){
 		require_once("form_login.php");
@@ -34,13 +33,27 @@
 		require_once("form_postagem.php");
 	}
 	
+	else if($_GET["t"]=="doacao"){
+		require_once("form_doacao.php");
+	}
+	else if($_GET["t"]=="tipo"){
+		require_once("form_tipo.php");
+	}
+	else if($_GET["t"]=="consulta"){
+		require_once("form_consulta.php");
+	}	
+	else if($_GET["t"]=="comentario"){
+		require_once("form_comentario.php");
+	}
 	else if($_GET["t"]=="historico_atendimento"){
 		require_once("form_historico_atendimento.php");
 	}
 	else if($_GET["t"]=="logout"){
 		require_once("logout.php");
 	}
-	
+
+	require_once("configuracoes_listar.php");
+
 	$c = new ControllerBD($conexao);
 	
 	$r = $c->selecionar($colunas,$t,null,null," LIMIT 0,5");
@@ -48,9 +61,10 @@
 		$matriz[] = $linha;
 
 	}
-	var_dump($matriz);
-	var_dump($t);
-	var_dump($colunas);
+	
+	//var_dump($matriz);
+	//var_dump($t);
+	//var_dump($colunas);
 	$t = new Tabela($matriz,$t[0][0]);
 	$t->exibe();
 ?>

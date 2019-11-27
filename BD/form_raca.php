@@ -79,6 +79,21 @@
 
 ?>
 <script>
+<?php 
+	// permissao:
+	// 1: root
+	// 2: veterinario
+	// 3: usr
+	if($_SESSION["login"]["permissao"] == 1){
+		echo "permissao=1;";
+	}
+	else if($_SESSION["login"]["permissao"] == 2){
+		echo "permissao=2;";
+	}
+	else{
+		echo "permissao=3;";
+	}
+?>
 pagina_atual = 1;
 	//quando o documento estiver pronto...
 	$(function(){
@@ -121,6 +136,12 @@ pagina_atual = 1;
 							pagina_atual--;
 						}
 						paginacao(pagina_atual);
+					}
+					else if(d == '0'){
+						$('#status').html("Você não tem permissão para remover.")
+					}
+					else if(d == "-1"){
+						$('#status').html("Você não está logado.")
 					}
 				}
 			});

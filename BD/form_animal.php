@@ -16,7 +16,7 @@
 		require_once("conexao.php");
 
 		$c = new ControllerBD($conexao);
-		$colunas = array("ID_ANIMAL", "NOME", "IDADE", "OBSERVACAO", "ID_LOGIN", "ID_RACA");
+		$colunas = array("ID_ANIMAL", "NOME", "IDADE", "OBSERVACAO", "ID_LOGIN", "ID_RACA", "DATA_ADOCAO");
 		$tabelas[0][0] = "ANIMAL";
 		$tabelas[0][1] = "RACA";
 		$tabelas[0][1] = "ANIMAL";
@@ -34,6 +34,7 @@
         $value_observacao = $linha["OBSERVACAO"];
         $selected_id_login = $linha["ID_LOGIN"];
         $selected_id_raca = $linha["ID_RACA"];
+        $data_adocao = $linha["DATA_ADOCAO"];
         $action = "altera.php?tabela=animal";
         $disabled = true;
 	}
@@ -44,19 +45,10 @@
         $value_nome = null;
         $value_idade = null;
         $value_observacao = null;
-        $selected_id_login = null;
+        $selected_id_login = $_SESSION["login"]["id"];
         $selected_id_raca = null;
+        $data_adocao = null;
 	}
-	
-	/////////////////////		//////////////////////		/////////////
-    $select = "SELECT ID_LOGIN AS value, NOME AS texto FROM LOGIN ORDER BY NOME";
-	
-	$stmt = $conexao->prepare($select);
-	$stmt->execute();
-	
-	while($linha=$stmt->fetch()){
-		$login[] = $linha;
-	}	
 	
     /////////////////////////////////////////////////////////////////////////
 	
@@ -91,11 +83,14 @@
     $v = array("type"=>"text","name"=>"OBSERVACAO","placeholder"=>"OBSERVAÇÃO...","value"=>$value_observacao);
     $f->add_input($v);
 	
-    $v = array("name"=>"ID_LOGIN","selected"=>$selected_id_login);
-    $f->add_select($v, $login);
+    $v = array("type"=>"hidden", "name"=>"ID_LOGIN", "value"=>$selected_id_login);
+	$f->add_input($v);
 	
 	$v = array("name"=>"ID_RACA","selected"=>$selected_id_raca);
     $f->add_select($v,$raca );
+    
+    $v = array("type"=>"date","name"=>"DATA_ADOCAO","placeholder"=>"DATA DE ADOCAO...","value"=>$data_adocao);
+    $f->add_input($v);
 	
 	
 	$v = array("type"=>"button","class"=>"cadastrar","texto"=>"CADASTRAR");
@@ -170,6 +165,12 @@
 							}
 							paginacao(pagina_atual);
 						}
+						else if(d == '0'){
+							$('#status').html("Você não tem permissão para remover.")
+						}
+						else if(d == "-1"){
+							$('#status').html("Você não está logado.")
+						}
 					}
 				});
 			});
@@ -190,7 +191,7 @@
 								0:{0:"ANIMAL", 1:"RACA"},
 								1:{0:"ANIMAL", 1:"LOGIN"}
 								},	
-							colunas:{0:"ID_ANIMAL",1:"ANIMAL.NOME as NOME",2:"IDADE",3:"OBSERVACAO",4:"LOGIN.NOME as LOGIN",5:"RACA.NOME AS RACA"},
+							colunas:{0:"ID_ANIMAL",1:"ANIMAL.NOME as NOME",2:"IDADE",3:"OBSERVACAO",4:"LOGIN.NOME as LOGIN",5:"RACA.NOME AS RACA", 6:"DATA_ADOCAO"},
 							pagina: b
 						  },
 					success: function(matriz){
@@ -204,6 +205,7 @@
 							tr += "<td>"+matriz[i].OBSERVACAO+"</td>";
 							tr += "<td>"+matriz[i].LOGIN+"</td>";
 							tr += "<td>"+matriz[i].RACA+"</td>";
+							tr += "<td>"+matriz[i].DATA_ADOCAO+"</td>";
 							tr += "<td><button value='"+matriz[i].ID_ANIMAL+"' class='remover'>Remover</button>";
 							tr += "<button value='"+matriz[i].ID_ANIMAL+"' class='alterar'>Alterar</button></td>";
 							tr += "</tr>";	
@@ -228,6 +230,7 @@
 						$("input[name='OBSERVACAO']").val(dados.OBSERVACAO);
 						$("select[name='ID_LOGIN']").val(dados.ID_LOGIN);
 						$("select[name='ID_RACA']").val(dados.ID_RACA);
+						$("select[name='DATA_ADOCAO']").val(dados.DATA_ADOCAO);
 						$(".cadastrar").attr("class","alterando");
 						$(".alterando").html("ALTERAR");
 					}
@@ -245,7 +248,8 @@
 							IDADE: $("input[name='IDADE']").val(),
 							OBSERVACAO: $("input[name='OBSERVACAO']").val(),
 							ID_LOGIN: $("select[name='ID_LOGIN']").val(),
-							ID_RACA: $("select[name='ID_RACA']").val()
+							ID_RACA: $("select[name='ID_RACA']").val(),
+							DATA_ADOCAO: $("select[name='DATA_ADOCAO']").val()
 						 },
 						beforeSend:function(){
 							$("button").attr("disabled",true);
@@ -263,7 +267,7 @@
 								$("input[name='OBSERVACAO']").val("");
 								$("input[name='ID_LOGIN']").val("");
 								$("input[name='ID_RACA']").val("");
-								
+								$("input[name='DATA_ADOCAO']").val("");
 								paginacao(pagina_atual);
 							}
 							else{
@@ -287,7 +291,8 @@
 							IDADE: $("input[name='IDADE']").val(),
 							OBSERVACAO: $("input[name='OBSERVACAO']").val(),
 							ID_LOGIN: $("input[name='ID_LOGIN']").val(),
-							ID_RACA: $("input[name='ID_RACA']").val()
+							ID_RACA: $("select[name='ID_RACA']").val(),
+							DATA_ADOCAO: $("input[name='DATA_ADOCAO']").val()
 						 },
 					beforeSend:function(){
 						$("button").attr("disabled",true);

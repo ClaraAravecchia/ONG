@@ -1,6 +1,8 @@
-<?php
+<?php error_reporting(-1);
 
-	include("../classeLayout/classeCabecalhoHTML.php");
+    ini_set("display_errors", 1); 
+
+	//include("../classeLayout/classeCabecalhoHTML.php");
 	include("cabecalho.php");
 	
 	require_once("../classeForm/InterfaceExibicao.php");
@@ -19,7 +21,7 @@
 		
 		$c = new ControllerBD($conexao);
 		
-		$colunas=array("ID_TIPO","TIPO_DOACAO","ID_DOACAO");
+		$colunas=array("ID_TIPO","TIPO_DOACAO");
 		$tabelas[0][0]="tipo";
 		$tabelas[0][1]=null;
 		$ordenacao = null;

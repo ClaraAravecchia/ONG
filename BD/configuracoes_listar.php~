@@ -51,39 +51,39 @@ if(isset($_GET["t"])){
 	else if($_GET["t"]=="raca"){
 		
 		$colunas = array(   "ID_RACA as 'ID'",
-							"NOME as 'NOME'",
-							"ID_ESPECIE as 'ESPECIE'"
+							"RACA.NOME as 'NOME'",
+							"ESPECIE.NOME as 'ESPECIE'"
 						);				
 				$t[0][0] = "RACA";
-				$t[0][1] = null;//"ESPECIE";
+				$t[0][1] = "ESPECIE";
 			
 	}
 	
 	else if($_GET["t"]=="animal"){
 		
 		$colunas = array(   "ID_ANIMAL as ID",
-							"NOME as NOME",
+							"ANIMAL.NOME as NOME",
 							"IDADE as IDADE",
 							"OBSERVACAO as 'OBSERVAÇÃO'",
-							"ID_LOGIN as 'LOGIN'",
-							"ID_RACA as 'RAÇA'"
+							"RACA.NOME as 'RAÇA'",
+							"LOGIN.NOME as 'LOGIN'"
 						);
 				$t[0][0] = "ANIMAL";
-				$t[0][1] = null;
-				//$t[0][1] = "LOGIN";
-				//$t[1][0] = "ANIMAL";
-				//$t[1][1] = "RACA";
+				$t[0][1] = "RACA";
+				$t[1][0] = "ANIMAL";
+				$t[1][1] = "LOGIN";
 	}
 	
 	else if($_GET["t"]=="postagem"){
 		
 		$colunas = array(   "ID_POSTAGEM as ID",
+							"LOGIN.NOME as 'LOGIN'",
 							"TEXTO as TEXTO",
 							"DATA_POSTAGEM as 'DATA DE POSTAGEM'",
-							"ID_LOGIN as 'ID DO LOGIN'"
+							"LOGIN.NOME as 'LOGIN'"
 						);
 				$t[0][0] = "POSTAGEM";
-				$t[0][1] = null;//"LOGIN";
+				$t[0][1] = "LOGIN";
 	}
 	else if($_GET["t"]=="consulta"){
 		
@@ -95,5 +95,41 @@ if(isset($_GET["t"])){
 				$t[0][0] = "CONSULTA";
 				$t[0][1] = null;//"LOGIN";
 	}
+	else if($_GET["t"]=="comentario"){
+		
+		$colunas = array(   "ID_COMENTARIO as ID",
+							"TEXTO as CONTEUDO",
+							"DATA_COMENTARIO as 'DATA'",
+							"ID_POSTAGEM as 'ID DA POSTAGEM'"
+						);
+				$t[0][0] = "COMENTARIO";
+				$t[0][1] = null;//"LOGIN";
+	}
+	else if($_GET["t"]=="doacao"){
+		
+		$colunas = array(   "ID_DOACAO as ID",
+							"DESCRICAO as DESCRIÇÃO",
+							"QUANTIDADE as QUANTIDADE",
+							"TIPO.DESCRICAO as TIPO",
+							"DATA_DOACAO as 'DATA DA DOAÇÃO'",
+							"LOGIN.NOME as 'LOGIN'"
+						);
+				$t[0][0] = "DOACAO";
+				$t[0][1] = "LOGIN";
+				$t[0][1] = "DOACAO";
+				$t[0][1] = "TIPO";
+	}
+	else if($_GET["t"]=="tipo"){
+		
+		$colunas = array(   "ID_TIPO as ID",
+							"DESCRICAO as DESCRIÇÃO",
+							"QUANTIDADE as QUANTIDADE",
+							"DATA_DOACAO as 'DATA DA DOAÇÃO'",
+							"LOGIN.NOME as 'LOGIN'"
+						);
+				$t[0][0] = "COMENTARIO";
+				$t[0][1] = "LOGIN";
+	}
+
 }
 ?>

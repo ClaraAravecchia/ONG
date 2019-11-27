@@ -82,7 +82,7 @@
 				$stmt->bindValue(":".$indice,$valor);
 			}
 			$r = $stmt->execute();
-			
+		
 			return($r);
 			//echo "Cadastrado com sucesso";
 		}

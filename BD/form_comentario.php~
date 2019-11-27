@@ -19,7 +19,7 @@
 		
 		$c = new ControllerBD($conexao);
 		
-		$colunas=array("ID_COMENTARIO","TEXTO","DATA_COMENTARIO","ID_POSTAGEM", "ID_LOGIN");
+		$colunas=array("ID_COMENTARIO","TEXTO","DATA_COMENTARIO","ID_POSTAGEM");
 		$tabelas[0][0]="COMENTARIO";
 		$tabelas[0][1]=null;
 		$ordenacao = null;

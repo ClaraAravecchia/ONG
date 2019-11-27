@@ -1,4 +1,6 @@
-<?php
+<?php error_reporting(-1);
+
+    ini_set("display_errors", 1); 
 	//include("../classeLayout/classeCabecalhoHTML.php");
 	//include("cabecalho.php");
 	
@@ -11,6 +13,7 @@
 		$c = new ControllerBD($conexao);
 		
 		$c->inserir($_POST,$_GET["tabela"]) or die("0");
+		print_r($c);
 		echo "1";
 	}
 	

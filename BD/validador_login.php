@@ -4,7 +4,7 @@
 	
 	$c = new ControllerBD($conexao);
 	
-	$colunas = array("ID_PERMISSAO");
+	$colunas = array("ID_PERMISSAO, ID_LOGIN");
 	$tabelas[0][0] = "LOGIN";
 	$tabelas[0][1] = null;//"PERMISSAO";
 	
@@ -16,14 +16,15 @@
 	$r = $c->selecionar($colunas,$tabelas,null,$condicoes,null);
 	
 	$linha = $r->fetch(PDO::FETCH_ASSOC);
-	print_r($linha);
+	////print_r($linha);
 	
 	
 	
 	if($linha!=null){
-		session_start();
+		session_start(); //a sessao já comeca em verificacao
 		$_SESSION["login"]["permissao"] = $linha["ID_PERMISSAO"];
-		print_r($_SESSION["login"]["permissao"]);
+		$_SESSION["login"]["id"] = $linha["ID_LOGIN"];
+		//print_r($_SESSION["login"]["permissao"]);
 		
 
 		header("location: index.php");

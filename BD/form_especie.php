@@ -124,12 +124,6 @@ pagina_atual = 1;
 					else if(d == "-1"){
 						$('#status').html("Você não está logado.")
 					}
-					else if(d == '0'){
-						$('#status').html("Você não tem permissão para remover.")
-					}
-					else if(d == "-1"){
-						$('#status').html("Você não está logado.")
-					}
 				}
 			});
 		});

@@ -89,22 +89,26 @@ if(isset($_GET["t"])){
 	else if($_GET["t"]=="consulta"){
 		
 		$colunas = array(   "ID_CONSULTA as ID",
-							"ID_ANIMAL as ANIMAL",
-							"ID_VETERINARIO as 'VETERINÁRIO'",
-							"ID_HISTORICO_ATENDIMENTO as 'HISTÓRICO DE ATENDIMENTO'"
+							"ANIMAL.NOME as ANIMAL",
+							"VETERINARIO.NOME as 'VETERINÁRIO'",
+							"HISTORICO_ATENDIMENTO.OBSERVACAO as 'HISTÓRICO DE ATENDIMENTO'"
 						);
 				$t[0][0] = "CONSULTA";
-				$t[0][1] = null;//"LOGIN";
+				$t[0][1] = "ANIMAL";
+				$t[1][0] = "CONSULTA";
+				$t[1][1] = "VETERINARIO";
+				$t[2][0] = "CONSULTA";
+				$t[2][1] = "HISTORICO_ATENDIMENTO";
 	}
 	else if($_GET["t"]=="comentario"){
 		
 		$colunas = array(   "ID_COMENTARIO as ID",
-							"TEXTO as 'CONTEÚDO'",
+							"COMENTARIO.TEXTO as 'CONTEÚDO'",
 							"DATA_COMENTARIO as 'DATA'",
-							"ID_POSTAGEM as 'ID DA POSTAGEM'"
+							"POSTAGEM.TEXTO as 'POSTAGEM'"
 						);
 				$t[0][0] = "COMENTARIO";
-				$t[0][1] = null;//"LOGIN";
+				$t[0][1] = "POSTAGEM ";
 	}
 	else if($_GET["t"]=="doacao"){
 		

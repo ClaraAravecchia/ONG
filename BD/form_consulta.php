@@ -104,7 +104,7 @@
 ?>
 <!DOCTYPE html>
 
-<h3>Formulário - Inserir Histórico de Atendimento</h3>
+<h3>Formulário - Inserir Consulta</h3>
 <div id="status"></div>
 
 <hr />
@@ -194,9 +194,12 @@ $(function(){
 			type: "post",
 			data: {
 					tabelas:{
-								0:{0:"CONSULTA",1:null}
+								0:{0:"CONSULTA",1:"ANIMAL"},
+								1:{0:"CONSULTA",1:"VETERINARIO"},
+								2:{0:"CONSULTA",1:"HISTORICO_ATENDIMENTO"}
 							},
-					colunas:{0:"ID_CONSULTA", 1:"ID_ANIMAL",2:"ID_VETERINARIO",3:"ID_HISTORICO_ATENDIMENTO"},
+					colunas:{0:"ID_CONSULTA", 1:"ANIMAL.NOME AS ANIMAL",2:"VETERINARIO.NOME AS VETERINARIO",
+							3:"HISTORICO_ATENDIMENTO.OBSERVACAO AS HISTORICO_ATENDIMENTO"},
 					pagina: b
 					},
 			success: function(matriz){
@@ -205,9 +208,9 @@ $(function(){
 				for(i=0;i<matriz.length;i++){
 					tr = "<tr>";
 					tr += "<td>"+matriz[i].ID_CONSULTA+"</td>";
-					tr += "<td>"+matriz[i].ID_ANIMAL+"</td>";
-					tr += "<td>"+matriz[i].ID_VETERINARIO+"</td>";
-					tr += "<td>"+matriz[i].ID_HISTORICO_ATENDIMENTO+"</td>";
+					tr += "<td>"+matriz[i].ANIMAL+"</td>";
+					tr += "<td>"+matriz[i].VETERINARIO+"</td>";
+					tr += "<td>"+matriz[i].HISTORICO_ATENDIMENTO+"</td>";
 					tr += "<td><button value='"+matriz[i].ID_HISTORICO_ATENDIMENTO+"' class='remover'>Remover</button>";
 					tr += "<button value='"+matriz[i].ID_HISTORICO_ATENDIMENTO+"' class='alterar'>Alterar</button></td>";
 					tr += "</tr>";	
@@ -226,9 +229,9 @@ $(function(){
 			data: {id: id_alterar, tabela: "CONSULTA"},
 			success: function(dados){
 				$("input[name='ID_CONSULTA']").val(dados.ID_CONSULTA);
-				$("input[name='ID_ANIMAL']").val(dados.ID_ANIMAL);
-				$("input[name='ID_VETERINARIO']").val(dados.ID_VETERINARIO);
-				$("input[name='ID_HISTORICO_ATENDIMENTO']").val(dados.ID_HISTORICO_ATENDIMENTO);
+				$("select[name='ID_ANIMAL']").val(dados.ID_ANIMAL);
+				$("select[name='ID_VETERINARIO']").val(dados.ID_VETERINARIO);
+				$("select[name='ID_HISTORICO_ATENDIMENTO']").val(dados.ID_HISTORICO_ATENDIMENTO);
 
 				$(".cadastrar").attr("class","alterando");
 				$(".alterando").html("ALTERAR");
@@ -243,9 +246,9 @@ $(function(){
 				type: "post",
 				data: {
 					ID_CONSULTA: $("input[name='ID_CONSULTA']").val(),
-					ID_ANIMAL: $("input[name='ID_ANIMAL']").val(),
-					VETERINARIO: $("input[name='ID_VETERINARIO']").val(),
-					HISTORICO_ATENDIMENTO: $("input[name='ID_HISTORICO_ATENDIMENTO']").val(),
+					ID_ANIMAL: $("select[name='ID_ANIMAL']").val(),
+					ID_VETERINARIO: $("select[name='ID_VETERINARIO']").val(),
+					ID_HISTORICO_ATENDIMENTO: $("select[name='ID_HISTORICO_ATENDIMENTO']").val(),
 					
 					},
 				beforeSend:function(){
@@ -259,9 +262,9 @@ $(function(){
 						$(".alterando").attr("class","cadastrar");
 						$(".cadastrar").html("CADASTRAR");
 						$("input[name='ID_CONSULTA']").val("");
-						$("input[name='ID_ANIMAL']").val("");
-						$("input[name='ID_VETERINARIO']").val("");
-						$("input[name='ID_HISTORICO_ATENDIMENTO']").val("");
+						$("select[name='ID_ANIMAL']").val("");
+						$("select[name='ID_VETERINARIO']").val("");
+						$("select[name='ID_HISTORICO_ATENDIMENTO']").val("");
 														
 						paginacao(pagina_atual);
 					}
@@ -282,9 +285,9 @@ $(function(){
 			type: "post",
 			data: {
 					ID_CONSULTA: $("input[name='ID_CONSULTA']").val(),
-					ID_ANIMAL: $("input[name='ID_ANIMAL']").val(),
-					VETERINARIO: $("input[name='ID_VETERINARIO']").val(),
-					HISTORICO_ATENDIMENTO: $("input[name='ID_HISTORICO_ATENDIMENTO']").val(),
+					ID_ANIMAL: $("select[name='ID_ANIMAL']").val(),
+					ID_VETERINARIO: $("select[name='ID_VETERINARIO']").val(),
+					ID_HISTORICO_ATENDIMENTO: $("select[name='ID_HISTORICO_ATENDIMENTO']").val(),
 				
 					},
 			beforeSend:function(){

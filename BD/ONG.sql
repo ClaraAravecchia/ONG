@@ -129,6 +129,7 @@ SHOW TABLES;
 INSERT INTO PERMISSAO VALUES (1,'Root');
 INSERT INTO PERMISSAO VALUES (2,'Veterinario');
 INSERT INTO PERMISSAO VALUES (3,'Usuário');
+INSERT INTO PERMISSAO VALUES (4,'Premium');
 
 INSERT INTO LOGIN VALUES (1,'Evely Cafe','12345','Av.Mendonza','(16)99999-9999','evely123@gmail.com', 1);
 INSERT INTO LOGIN VALUES (2,'Ana Aravecchia','00000','Av.Paulista','(16)99999-8888','anaclara@yahoo.com', 1);

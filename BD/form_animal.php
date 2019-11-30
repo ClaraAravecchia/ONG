@@ -203,8 +203,8 @@
 							tr += "<td>"+matriz[i].NOME+"</td>";
 							tr += "<td>"+matriz[i].IDADE+"</td>";
 							tr += "<td>"+matriz[i].OBSERVACAO+"</td>";
-							tr += "<td>"+matriz[i].LOGIN+"</td>";
 							tr += "<td>"+matriz[i].RACA+"</td>";
+							tr += "<td>"+matriz[i].LOGIN+"</td>";
 							tr += "<td>"+matriz[i].DATA_ADOCAO+"</td>";
 							tr += "<td><button value='"+matriz[i].ID_ANIMAL+"' class='remover'>Remover</button>";
 							tr += "<button value='"+matriz[i].ID_ANIMAL+"' class='alterar'>Alterar</button></td>";
@@ -230,7 +230,7 @@
 						$("input[name='OBSERVACAO']").val(dados.OBSERVACAO);
 						$("select[name='ID_LOGIN']").val(dados.ID_LOGIN);
 						$("select[name='ID_RACA']").val(dados.ID_RACA);
-						$("select[name='DATA_ADOCAO']").val(dados.DATA_ADOCAO);
+						$("input[name='DATA_ADOCAO']").val(dados.DATA_ADOCAO);
 						$(".cadastrar").attr("class","alterando");
 						$(".alterando").html("ALTERAR");
 					}
@@ -249,7 +249,7 @@
 							OBSERVACAO: $("input[name='OBSERVACAO']").val(),
 							ID_LOGIN: $("select[name='ID_LOGIN']").val(),
 							ID_RACA: $("select[name='ID_RACA']").val(),
-							DATA_ADOCAO: $("select[name='DATA_ADOCAO']").val()
+							DATA_ADOCAO: $("input[name='DATA_ADOCAO']").val()
 						 },
 						beforeSend:function(){
 							$("button").attr("disabled",true);
@@ -265,8 +265,8 @@
 								$("input[name='NOME']").val("");
 								$("input[name='IDADE']").val("");
 								$("input[name='OBSERVACAO']").val("");
-								$("input[name='ID_LOGIN']").val("");
-								$("input[name='ID_RACA']").val("");
+								$("select[name='ID_LOGIN']").val("");
+								$("select[name='ID_RACA']").val("");
 								$("input[name='DATA_ADOCAO']").val("");
 								paginacao(pagina_atual);
 							}
@@ -290,7 +290,7 @@
 							NOME: $("input[name='NOME']").val(),
 							IDADE: $("input[name='IDADE']").val(),
 							OBSERVACAO: $("input[name='OBSERVACAO']").val(),
-							ID_LOGIN: $("input[name='ID_LOGIN']").val(),
+							ID_LOGIN: $("select[name='ID_LOGIN']").val(),
 							ID_RACA: $("select[name='ID_RACA']").val(),
 							DATA_ADOCAO: $("input[name='DATA_ADOCAO']").val()
 						 },

@@ -1,7 +1,7 @@
 <?php
 
 	require_once("../classeLayout/classeCabecalhoHTML.php");
-	require_once("cabecalho.php");
+	//require_once("cabecalho.php");
 
 	require_once("../classeForm/classeInput.php");
 	require_once("../classeForm/classeForm.php");
@@ -46,9 +46,6 @@
 		date_default_timezone_set('America/Sao_Paulo');
 		$value_data_postagem = date("Y-m-d");
 
-		///$data = date('d/m/Y', strtotime($data));
-		echo $value_data_postagem;
-		//$value_imagem = null;
 		$selected_id_login = $_SESSION["login"]["id"];
 	}
 	
@@ -83,9 +80,7 @@
 	$f->add_button($v);	
 ?>
 
-<hr/>
-<hr/>
-<center><h3>Bem Vindo ao sistema de ONG</h3></center>
+<h3>Formulário - Inserir Postagem</h3>
 <div id="status"></div>
 
 <hr />

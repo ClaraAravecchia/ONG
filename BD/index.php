@@ -1,267 +1,34 @@
-<?php
-    require_once("../classeLayout/classeTabela.php");
-
-    include("../classeLayout/classeCabecalhoHTML.php");
-    include("cabecalho.php");
-    include("classeControllerBD.php");
-
-
-	//print_r($_SESSION);
-	include("conexao.php");
-	require_once("../classeForm/classeInput.php");
-	require_once("../classeForm/classeForm.php");
-	require_once("../classeForm/classeButton.php");
-	require_once("../classeForm/classeSelect.php");
-	require_once("../classeForm/classeOption.php");
-
-	if (isset($_POST["id"])) {
-		require_once("classeControllerBD.php");
-		
-		$c = new ControllerBD($conexao);
-		
-		$colunas=array("ID_POSTAGEM","TEXTO","DATA_POSTAGEM",/*"IMAGEM",*/"ID_LOGIN");
-		$tabelas[0][0]="postagem";
-		//$tabelas[0][1]="login";
-		$ordenacao = null;
-		$condicao = $_POST["id"];
-		
-		$stmt = $c->selecionar($colunas,$tabelas,$ordenacao,$condicao);
-		$linha = $stmt->fetch(PDO::FETCH_ASSOC);
-		
-		$value_id_postagem = $linha["ID_POSTAGEM"];
-		$value_texto = $linha["TEXTO"];
-		$value_data_postagem = $linha["DATA_POSTAGEM"];
-		//$value_imagem = $linha["IMAGEM"];
-		$selected_id_login = $linha["ID_LOGIN"];
-		$disabled=true;
-		
-		$action = "altera.php?tabela=postagem";
-	}
-	
-	else{
-		$disabled = false;
-		$action = "insere.php?tabela=postagem";
-		$value_id_postagem = null;
-		$value_texto = null;
-		
-		date_default_timezone_set('America/Sao_Paulo');
-		$value_data_postagem = date('d/m/Y \à\s H:i:s');;
-		//$value_imagem = null;
-		$selected_id_login = $_SESSION["login"]["id"];
-	}
-	
-	/////////////////		///////////////		///////////////
-
-
-	$v = array("action"=>$action,"method"=>"post");
-	$f = new Form($v);
-	
-	$v = array("type"=>"text","name"=>"ID_POSTAGEM","placeholder"=>"ID DA POSTAGEM", "value"=>$value_id_postagem,"disabled"=>$disabled);
-	$f->add_input($v);
-	
-	if($disabled){
-		$v = array("type"=>"hidden","name"=>"ID_POSTAGEM","value"=>$value_id_postagem);
-		$f->add_input($v);
-	}
-	
-	$v = array("type"=>"textarea","name"=>"TEXTO","placeholder"=>"TEXTO...", "value"=>$value_texto);
-	$f->add_input($v);
-	
-	$v = array("type"=>"hidden","name"=>"DATA", "value"=>$value_data_postagem);
-	$f->add_input($v);
-	
-	//$v = array("type"=>"","name"=>"IMAGEM","value"=>$value_imagem);
-	//$f->add_input($v);
-	
-	$v = array("type"=>"hidden", "name"=>"ID_LOGIN", "value"=>$selected_id_login);
-	$f->add_input($v);
-	
-	
-	$v = array("type"=>"button","class"=>"cadastrar","texto"=>"POSTAR");
-	$f->add_button($v);	
-?>
-
-<hr/>
-<center><h3>Bem Vindo ao sistema de ONG</h3></center>
-<div id="status"></div>
-
-	<hr />
 	<?php
-		$f->exibe();
+		require_once ("../classeLayout/classeCabecalhoHTML.php");
+		require_once("cabecalho.php");
 	?>
-		
-	<script>
-		pagina_atual = 1;
-	
-		$(function(){
-			
-			carrega_botoes();
-			
-			function carrega_botoes(){
-				
-				$.ajax({
-					url: "quantidade_botoes.php",
-					type: "post",
-					data: {tabela: "POSTAGEM"},
-					success: function(q){
-						console.log(q);
-						$("#botoes").html("");
-						for(i=1;i<=q;i++){
-							botao = " <button type='button' class='pg'>" + i + "</button>";
-							$("#botoes").append(botao);
-						}
-					}
-				});
-			}
 
-			$(document).on("click", ".remover", function(){
-				id_remover = $(this).val();
+	<section class="courses">
+		<hgroup>
+			<h2>AAEC</h2>
+			<h3>Sejam Bem Vindos</h3>
+		</hgroup>
+		<p><center> &#160 &#160 Adotar é um ato de amor. E dedicar-se a outro ser vivo, dando-lhe afeto, cuidados e atenção, é parte disso. É uma alegria ver como cães e gatos têm conquistado um lar acolhedor, que os protege dos maus tratos das ruas.</center></p>
+		<p><center><b>(Newt Scamander)</b></center></p>
+		<br/>
+		<p><center> &#160 &#160 É por amor que criamos este projeto. Com o objetivo de ajudar estes pequenos anjos a encontrarem suas famílias. A encontrar lares e pessoas que estejam dispostas a retribuir o amor que só eles podem oferecer. Um amor puro sem outras intenções.</center></p>
+		<p><center> &#160 &#160 Se você está disposto a ama-los, assim como nós os amamos, então não perca tempo. Faça parte desta ONG, e junte-se a nossa grande família.</center></p>
+	</section>
 
-				$.ajax({
-					url: "remover.php",
-					type: "post",
-					data: {
-						id: id_remover,
-						tabela: "POSTAGEM"
-					},
-					success: function(d){
-						if(d == 1){
-							$("#status").html("Removido com sucesso");
-							carrega_botoes();
-							qtd = $("tbody tr").length;
-							if(qtd == "1"){
-								pagina_atual--;
-							}
-							paginacao(pagina_atual);
-						}
-					}
-				});
-			});
-			
-			$(document).on("click",".pg",function(){
-				valor_botao = $(this).html();
-				pagina_atual = valor_botao;
-				paginacao(valor_botao);
-			});
-			
-			function paginacao(b){
-				
-				$.ajax({
-					url: "carrega_dados.php",
-					type: "post",
-					data: {
-							tabelas:{
-										0:{0:"POSTAGEM",1:null}
-									},
-							colunas:{0:"ID_POSTAGEM",1:"TEXTO",2:"DATA_POSTAGEM",3:"ID_LOGIN"},
-							pagina: b
-						  },
-					success: function(matriz){
-						
-						$("tbody").html("");
-						for(i=0;i<matriz.length;i++){
-							tr = "<tr>";
-							tr += "<td>"+matriz[i].ID_POSTAGEM+"</td>";
-							tr += "<td>"+matriz[i].TEXTO+"</td>";
-							tr += "<td>"+matriz[i].DATA_POSTAGEM+"</td>";
-							tr += "<td>"+matriz[i].ID_LOGIN+"</td>";
-							tr += "<td><button value='"+matriz[i].ID_POSTAGEM+"' class='remover'>Remover</button>";
-							tr += "<button value='"+matriz[i].ID_POSTAGEM+"' class='alterar'>Alterar</button></td>";
-							tr += "</tr>";	
-							$("tbody").append(tr);
-						}
-					}
-				});
-			}
-			
-			$(document).on("click",".alterar",function(){
-			//$(".alterar").click(function(){ 
-				id_alterar = $(this).val();			
-				$.ajax({
-					url: "get_dados_form.php",
-					type: "post",
-					data: {id: id_alterar, tabela: "POSTAGEM"},
-					success: function(dados){
-						$("input[name='ID_POSTAGEM']").val(dados.ID_POSTAGEM);
-						$("input[name='TEXTO']").val(dados.TEXTO);
-						$("input[name='DATA_POSTAGEM']").val(dados.DATA_POSTAGEM);
-						$("input[name='ID_LOGIN']").val(dados.ID_LOGIN);
-						$(".cadastrar").attr("class","alterando");
-						$(".alterando").html("ALTERAR");
-					}
-				});
-			});
-				
-				$(document).on("click",".alterando",function(){
-					
-					$.ajax({
-						url:"altera.php?tabela=POSTAGEM",
-						type: "post",
-						data: {
-							ID_POSTAGEM: $("input[name='ID_POSTAGEM']").val(),
-							TEXTO: $("input[name='TEXTO']").val(),
-							DATA_POSTAGEM: $("input[name='DATA_POSTAGEM']").val(),
-							ID_LOGIN: $("input[name='ID_LOGIN']").val()
-						 },
-						beforeSend:function(){
-							$("button").attr("disabled",true);
-						},
-						success: function(d){
-							$("button").attr("disabled",false);
-							if(d=='1'){
-								$("#status").html("Postagem Alterada com sucesso!");
-								$("#status").css("color","green");
-								$(".alterando").attr("class","cadastrar");
-								$(".cadastrar").html("CADASTRAR");
-								$("input[name='ID_POSTAGEM']").val("");
-								$("input[name='TEXTO']").val("");
-								$("input[name='DATA_POSTAGEM']").val("");
-								$("input[name='ID_LOGIN']").val("");
-								
-								paginacao(pagina_atual);
-							}
-							else{
-								console.log(d);
-								$("#status").html("Postagem Não Alterada! Código já existe!");
-								$("#status").css("color","red");
-							}
-						}
-					});
-				});
-				
-				//defina a seguinte regra para o botao de envio
-				$(document).on("click",".cadastrar",function(){
-				
-				$.ajax({
-					url: "insere.php?tabela=POSTAGEM",
-					type: "post",
-					data: {
-							ID_POSTAGEM: $("input[name='ID_POSTAGEM']").val(),
-							TEXTO: $("input[name='TEXTO']").val(),
-							DATA_POSTAGEM: $("input[name='DATA_POSTAGEM']").val(),
-							ID_LOGIN: $("input[name='ID_LOGIN']").val()
-						 },
-					beforeSend:function(){
-						$("button").attr("disabled",true);
-					},
-					success: function(d){
-						$("button").attr("disabled",false);
-						if(d=='1'){
-							$("#status").html("Postagem inserida com sucesso!");
-							$("#status").css("color","green");
-							carrega_botoes();
-							paginacao(pagina_atual);
-						}
-						else{
-							console.log(d);
-							$("#status").html("Postagem Não Alterada! Código já existe!");
-							$("#status").css("color","red");
-						}
-					}
-				});
-			});
-			
-		});
-	</script>
+	<aside>
+		<section>
+			<h2>Criadoras da AAEC</h2>
+			<center><img src="../imagens/ana2.jpg" ></center>
+			<center><img src="../imagens/evely2.jpg" ></center>
+			<center><button><a href="saibamais.php" target="_blank" >Saiba Mais</a></button></center>
+		</section>
+	</aside>
+
+	<footer>
+		&copy; 2019, AAEC<br/>
+		Adotamos um ao outro,  simples  assim: porque eu precisava dele  e ele de mim. (Alessandra Grani)
+	</footer>
+
+</div>
 </body>
 </html>

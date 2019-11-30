@@ -2,7 +2,6 @@
 
     ini_set("display_errors", 1); 
 	require_once("../classeLayout/classeCabecalhoHTML.php");
-	//require_once("cabecalho.php");
 	
 	require_once("../classeForm/classeInput.php");
 	require_once("../classeForm/classeForm.php");
@@ -42,7 +41,9 @@
 		$action = "insere.php?tabela=comentario";
 		$value_id_comentario = null;
 		$value_texto = null;
-		$value_data_comentario = null;
+
+		date_default_timezone_set('America/Sao_Paulo');
+		$value_data_comentario = date("Y-m-d");
 		$selected_id_postagem = null;
 	}
 	
@@ -73,7 +74,7 @@
 	$v = array("type"=>"textarea","name"=>"TEXTO","placeholder"=>"TEXTO...", "value"=>$value_texto);
 	$f->add_input($v);
 	
-	$v = array("type"=>"date","name"=>"DATA", "value"=>$value_data_comentario);
+	$v = array("type"=>"hidden","name"=>"DATA_COMENTARIO", "value"=>$value_data_comentario);
 	$f->add_input($v);
 	
 	$v = array("name"=>"ID_POSTAGEM", "selected"=>$selected_id_postagem);
@@ -142,6 +143,7 @@ $(function(){
 				tabela: "COMENTARIO"
 			},
 			success: function(d){
+				console.log(d);
 				if(d == 1){
 					$("#status").html("Removido com sucesso");
 					carrega_botoes();
@@ -173,20 +175,20 @@ $(function(){
 			type: "post",
 			data: {
 					tabelas:{
-								0:{0:"COMENTARIO",1:null}
+								0:{0:"COMENTARIO",1:"POSTAGEM"}
 							},
-					colunas:{0:"ID_COMENTARIO",1:"TEXTO",2:"DATA_COMENTARIO",3:"ID_POSTAGEM"}, 
+					colunas:{0:"ID_COMENTARIO",1:"COMENTARIO.TEXTO AS TEXTO",2:"DATA_COMENTARIO",3:"POSTAGEM.TEXTO AS POSTAGEM"}, 
 					pagina: b
 				  },
 			success: function(matriz){
-				
+				console.log(matriz);
 				$("tbody").html("");
 				for(i=0;i<matriz.length;i++){
 					tr = "<tr>";
 					tr += "<td>"+matriz[i].ID_COMENTARIO+"</td>";
 					tr += "<td>"+matriz[i].TEXTO+"</td>";
 					tr += "<td>"+matriz[i].DATA_COMENTARIO+"</td>";
-					tr += "<td>"+matriz[i].ID_POSTAGEM+"</td>";
+					tr += "<td>"+matriz[i].POSTAGEM+"</td>";
 					tr += "<td><button value='"+matriz[i].ID_COMENTARIO+"' class='remover'>Remover</button>";
 					tr += "<button value='"+matriz[i].ID_COMENTARIO+"' class='alterar'>Alterar</button></td>";
 					tr += "</tr>";	
@@ -205,7 +207,7 @@ $(function(){
 			success: function(dados){
 				$("input[name='ID_COMENTARIO']").val(dados.ID_COMENTARIO);
 				$("input[name='TEXTO']").val(dados.TEXTO);
-				$("input[name='DATA_COMENTARIO']").val(dados.DATA_COMENTARIO);
+				//$("hidden[name='DATA_COMENTARIO']").val(dados.DATA_COMENTARIO);
 				$("select[name='ID_POSTAGEM']").val(dados.ID_POSTAGEM);
 				$(".cadastrar").attr("class","alterando");
 				$(".alterando").html("ALTERAR");
@@ -220,7 +222,7 @@ $(function(){
 			data: {
 				ID_COMENTARIO: $("input[name='ID_COMENTARIO']").val(),
 				TEXTO: $("input[name='TEXTO']").val(),
-				DATA_COMENTARIO: $("input[name='DATA_COMENTARIO']").val(),
+				//DATA_COMENTARIO: $("hidden[name='DATA_COMENTARIO']").val(),
 				ID_POSTAGEM: $("select[name='ID_POSTAGEM']").val()
 			 },
 			beforeSend:function(){
@@ -235,10 +237,10 @@ $(function(){
 					$(".cadastrar").html("CADASTRAR");
 					$("input[name='ID_COMENTARIO']").val("");
 					$("input[name='TEXTO']").val("");
-					$("input[name='DATA_COMENTARIO']").val("");
+					//$("hidden[name='DATA_COMENTARIO']").val("");
 					$("select[name='ID_POSTAGEM']").val("");
 					
-					paginacao(pagina_atual);
+					paginacao(0);
 				}
 				else{
 					console.log(d);
@@ -268,7 +270,7 @@ $(function(){
 					$("#status").html("Comentário inserido com sucesso!");
 					$("#status").css("color","green");
 					carrega_botoes();
-					paginacao(pagina_atual);
+					paginacao(0);
 				}
 				else{
 					console.log(d);

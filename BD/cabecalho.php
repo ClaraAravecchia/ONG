@@ -1,4 +1,17 @@
-<?php error_reporting(-1);
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+		<link href="css/styles.css" type="text/css" rel="stylesheet" />
+	</head>	
+	<body>
+		<div class="content">
+			<header>
+				<h1>ONG</h1>
+			</header>
+			
+<?php
+	error_reporting(-1);
 
     ini_set("display_errors", 1); 
     
@@ -23,5 +36,6 @@
 				
 	$c->add_menu($v);
 	$c->exibe();
+
 
 ?>

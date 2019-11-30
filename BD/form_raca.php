@@ -18,7 +18,7 @@
 		$c = new ControllerBD($conexao);
 		$colunas = array("ID_RACA", "NOME", "ID_ESPECIE");
 		$tabelas[0][0] = "RACA";
-		$tabelas[0][1] = "ESPECIE";
+		$tabelas[0][1] = null;
 		$ordenacao = null;
 		$condicao = $_POST["id"];
 
@@ -162,11 +162,11 @@ pagina_atual = 1;
 						tabelas:{
 									0:{0:"RACA",1:"ESPECIE"}
 								},
-						colunas:{0:"ID_RACA",1:"NOME", 2: "ESPECIE.NOME AS ESPECIE"}, 
+						colunas:{0:"ID_RACA",1:"RACA.NOME AS NOME", 2: "ESPECIE.NOME AS ESPECIE"}, 
 						pagina: b
 					  },
 				success: function(matriz){
-					
+					console.log(matriz);
 					$("tbody").html("");
 					for(i=0;i<matriz.length;i++){
 						tr = "<tr>";
@@ -192,7 +192,7 @@ pagina_atual = 1;
 				success: function(dados){
 					$("input[name='ID_RACA']").val(dados.ID_RACA);
                     $("input[name='NOME']").val(dados.NOME);
-                    $("input[name='ID_ESPECIE']").val(dados.ID_ESPECIE);
+                    $("select[name='ID_ESPECIE']").val(dados.ID_ESPECIE);
 					$(".cadastrar").attr("class","alterando");
 					$(".alterando").html("ALTERAR");
 				}
@@ -207,7 +207,7 @@ pagina_atual = 1;
 					data: {
 						ID_RACA: $("input[name='ID_RACA']").val(),
                         NOME: $("input[name='NOME']").val(),
-                        ID_ESPECIE: $("input[name='ID_ESPECIE']").val()
+                        ID_ESPECIE: $("select[name='ID_ESPECIE']").val()
 					 },
 					beforeSend:function(){
 						$("button").attr("disabled",true);
@@ -221,7 +221,7 @@ pagina_atual = 1;
 							$(".cadastrar").html("CADASTRAR");
 							$("input[name='ID_RACA']").val("");
 							$("input[name='NOME']").val("");
-							$("input[name='ID_ESPECIE']").val("");
+							$("select[name='ID_ESPECIE']").val("");
 							
 							paginacao(pagina_atual);
 						}
@@ -243,7 +243,7 @@ pagina_atual = 1;
 				data: {
 						ID_RACA: $("input[name='ID_RACA']").val(),
                         NOME: $("input[name='NOME']").val(),
-                        ID_ESPECIE: $("input[name='ID_ESPECIE']").val(),
+                        ID_ESPECIE: $("select[name='ID_ESPECIE']").val(),
 					 },
 				beforeSend:function(){
 					$("button").attr("disabled",true);
@@ -254,7 +254,7 @@ pagina_atual = 1;
 						$("#status").html("Raça inserida com sucesso!");
 						$("#status").css("color","green");
 						carrega_botoes();
-						paginacao(pagina_atual);
+						paginacao(0);
 					}
 					else{
 						console.log(d);

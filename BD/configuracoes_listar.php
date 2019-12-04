@@ -40,12 +40,13 @@ if(isset($_GET["t"])){
 	else if($_GET["t"]=="historico_atendimento"){
 		
 		$colunas = array(   "ID_HISTORICO_ATENDIMENTO as ID",
+							"ANIMAL.NOME  AS ANIMAL",
 							"DATA_ATENDIMENTO as 'DATA DE ATENDIMENTO'",
 							"MEDICACAO as 'MEDICAÇÃO'",
-							"OBSERVACAO as 'OBSERVAÇÃO'"
+							"HISTORICO_ATENDIMENTO.OBSERVACAO as 'OBSERVAÇÃO'"
 						);
 				$t[0][0] = "HISTORICO_ATENDIMENTO";
-				$t[0][1] = null;
+				$t[0][1] = "ANIMAL";
 	}
 	
 	else if($_GET["t"]=="raca"){
@@ -125,7 +126,7 @@ if(isset($_GET["t"])){
 				$t[1][1] = "TIPO";
 	}
 	else if($_GET["t"]=="tipo"){
-		
+
 		$colunas = array(   "ID_TIPO as ID",
 							"TIPO_DOACAO as 'DESCRIÇÃO'"
 						);

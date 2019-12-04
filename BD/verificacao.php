@@ -1,4 +1,7 @@
 <?php
+   // echo $_SERVER["PHP_SELF"];   
+   // /ONG/BD/listar.php
+    
     $v = explode("/", $_SERVER["PHP_SELF"]);
     $p = sizeof($v)-1;
     $arquivo = $v[$p];

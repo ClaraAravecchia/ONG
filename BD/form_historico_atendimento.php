@@ -7,15 +7,17 @@
 	require_once("../classeForm/classeInput.php");
 	require_once("../classeForm/classeForm.php");
 	require_once("../classeForm/classeButton.php");
+	require_once("../classeForm/classeSelect.php");
+	require_once("../classeForm/classeOption.php");
 
 	if(isset($_POST["id"])){
 		require_once("classeControllerBD.php");
 		require_once("conexao.php");
 
 		$c = new ControllerBD($conexao);
-		$colunas = array("ID_HISTORICO_ATENDIMENTO", "DATA_ATENDIMENTO", "MEDICACAO", "OBSERVACAO");
+		$colunas = array("ID_HISTORICO_ATENDIMENTO", "DATA_ATENDIMENTO", "MEDICACAO", "OBSERVACAO", "ANIMAL.ID_ANIMAL");
 		$tabelas[0][0] = "historico_atendimento";
-		$tabelas[0][1] = null;
+		$tabelas[0][1] = "animal";
 		$ordenacao = null;
 		$condicao = $_POST["id"];
 
@@ -26,7 +28,8 @@
         $value_data = $linha["DATA_ATENDIMENTO"];
         $value_medicacao = $linha["MEDICACAO"];
         $value_observacao = $linha["OBSERVACAO"];
-        $action = "altera.php?tabela=historico_atendimento";
+		$action = "altera.php?tabela=historico_atendimento";
+		$selected_id_animal = $linha["ID_ANIMAL"];
         $disabled = true;
 	}
 	else{
@@ -35,8 +38,22 @@
 		$value_id_historico = null;
         $value_data = null;
         $value_medicacao = null;
-        $value_observacao = null;
+		$value_observacao = null;
+		$selected_id_animal = NULL;
 	}
+
+	/////////////////		///////////////		///////////////
+	
+	$select = "SELECT ID_ANIMAL AS value, NOME AS texto FROM ANIMAL ORDER BY NOME";
+
+	$stmt = $conexao->prepare($select);
+	$stmt->execute();
+	
+	while($linha=$stmt->fetch()){
+		$animal[] = $linha;
+	} 
+
+	//////////////		//////////////////		//////////////
 
 
 	$v = array("action"=>$action,"method"=>"post");
@@ -51,7 +68,10 @@
     }
 	
 	$v = array("type"=>"date","name"=>"DATA_ATENDIMENTO","value"=>$value_data);
-    $f->add_input($v);
+	$f->add_input($v);
+	
+	$v = array("name"=>"ID_ANIMAL", "selected"=>$selected_id_animal);
+	$f->add_select($v,$animal);
 
     $v = array("type"=>"text","name"=>"MEDICACAO","placeholder"=>"MEDICAÇÃO...","value"=>$value_medicacao);
     $f->add_input($v);
@@ -154,9 +174,9 @@ pagina_atual = 1;
 				type: "post",
 				data: {
 						tabelas:{
-									0:{0:"HISTORICO_ATENDIMENTO",1:null}
+									0:{0:"HISTORICO_ATENDIMENTO",1:"ANIMAL"}
 								},
-						colunas:{0:"ID_HISTORICO_ATENDIMENTO",1:"DATA_ATENDIMENTO",2:"MEDICACAO",3:"OBSERVACAO"}, 
+						colunas:{0:"ID_HISTORICO_ATENDIMENTO",1:"DATA_ATENDIMENTO",2:"MEDICACAO",3:"HISTORICO_ATENDIMENTO.OBSERVACAO", 4:"ANIMAL.NOME AS ANIMAL"}, 
 						pagina: b
 					  },
 				success: function(matriz){
@@ -165,6 +185,7 @@ pagina_atual = 1;
 					for(i=0;i<matriz.length;i++){
 						tr = "<tr>";
 						tr += "<td>"+matriz[i].ID_HISTORICO_ATENDIMENTO+"</td>";
+						tr += "<td>"+matriz[i].ANIMAL+"</td>";
 						tr += "<td>"+matriz[i].DATA_ATENDIMENTO+"</td>";
 						tr += "<td>"+matriz[i].MEDICACAO+"</td>";
 						tr += "<td>"+matriz[i].OBSERVACAO+"</td>";
@@ -186,6 +207,7 @@ pagina_atual = 1;
 				data: {id: id_alterar, tabela: "HISTORICO_ATENDIMENTO"},
 				success: function(dados){
 					$("input[name='ID_HISTORICO_ATENDIMENTO']").val(dados.ID_HISTORICO_ATENDIMENTO);
+					$("select[name='ID_ANIMAL']").val(dados.ANIMAL);
 					$("input[name='DATA_ATENDIMENTO']").val(dados.DATA_ATENDIMENTO);
 					$("input[name='MEDICACAO']").val(dados.MEDICACAO);
 					$("input[name='OBSERVACAO']").val(dados.OBSERVACAO);
@@ -202,6 +224,7 @@ pagina_atual = 1;
 					type: "post",
 					data: {
 						ID_HISTORICO_ATENDIMENTO: $("input[name='ID_HISTORICO_ATENDIMENTO']").val(),
+						ID_ANIMAL: $("select[name='ID_ANIMAL']").val(),
 						DATA_ATENDIMENTO: $("input[name='DATA_ATENDIMENTO']").val(),
 						MEDICACAO: $("input[name='MEDICACAO']").val(),
 						OBSERVACAO: $("input[name='OBSERVACAO']").val()
@@ -217,6 +240,7 @@ pagina_atual = 1;
 							$(".alterando").attr("class","cadastrar");
 							$(".cadastrar").html("CADASTRAR");
 							$("input[name='ID_HISTORICO_ATENDIMENTO']").val("");
+							$("select[name='ID_ANIMAL']").val("");
 							$("input[name='DATA_ATENDIMENTO']").val("");
 							$("input[name='MEDICACAO']").val("");
 							$("input[name='OBSERVACAO']").val("");
@@ -240,6 +264,7 @@ pagina_atual = 1;
 				type: "post",
 				data: {
 						ID_HISTORICO_ATENDIMENTO: $("input[name='ID_HISTORICO_ATENDIMENTO']").val(),
+						ID_ANIMAL: $("select[name='ID_ANIMAL']").val(),
 						DATA_ATENDIMENTO: $("input[name='DATA_ATENDIMENTO']").val(),
 						MEDICACAO: $("input[name='MEDICACAO']").val(),
 						OBSERVACAO: $("input[name='OBSERVACAO']").val()

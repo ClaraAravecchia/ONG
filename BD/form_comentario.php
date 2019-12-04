@@ -20,7 +20,7 @@
 		
 		$colunas=array("ID_COMENTARIO","TEXTO","DATA_COMENTARIO","ID_POSTAGEM");
 		$tabelas[0][0]="COMENTARIO";
-		$tabelas[0][1]=null;
+		$tabelas[0][1]="POSTAGEM";
 		$ordenacao = null;
 		$condicao = $_POST["id"];
 		
@@ -237,10 +237,10 @@ $(function(){
 					$(".cadastrar").html("CADASTRAR");
 					$("input[name='ID_COMENTARIO']").val("");
 					$("input[name='TEXTO']").val("");
+					$("input[name='ID_POSTAGEM']").val("");
 					//$("hidden[name='DATA_COMENTARIO']").val("");
-					$("select[name='ID_POSTAGEM']").val("");
 					
-					paginacao(0);
+					paginacao(pagina_atual);
 				}
 				else{
 					console.log(d);
@@ -270,7 +270,7 @@ $(function(){
 					$("#status").html("Comentário inserido com sucesso!");
 					$("#status").css("color","green");
 					carrega_botoes();
-					paginacao(0);
+					paginacao(pagina_atual);
 				}
 				else{
 					console.log(d);

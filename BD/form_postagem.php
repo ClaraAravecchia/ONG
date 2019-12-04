@@ -20,7 +20,7 @@
 		
 		$colunas=array("ID_POSTAGEM","TEXTO","DATA_POSTAGEM",/*"IMAGEM",*/"ID_LOGIN");
 		$tabelas[0][0]="postagem";
-		//$tabelas[0][1]="login";
+		$tabelas[0][1]="login";
 		$ordenacao = null;
 		$condicao = $_POST["id"];
 		
@@ -180,8 +180,8 @@ $(function(){
 				$("tbody").html("");
 				for(i=0;i<matriz.length;i++){
 					tr = "<tr>";
-					tr += "<td>"+matriz[i].LOGIN+"</td>";
 					tr += "<td>"+matriz[i].ID_POSTAGEM+"</td>";
+					tr += "<td>"+matriz[i].LOGIN+"</td>";
 					tr += "<td>"+matriz[i].TEXTO+"</td>";
 					tr += "<td>"+matriz[i].DATA_POSTAGEM+"</td>";
 					

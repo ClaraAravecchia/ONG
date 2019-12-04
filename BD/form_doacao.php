@@ -20,7 +20,7 @@
 		
 		$c = new ControllerBD($conexao);
 		
-		$colunas=array("ID_DOACAO","QUANTIDADE","DATA_DOACAO","LOGIN", "TIPO");
+		$colunas=array("ID_DOACAO","QUANTIDADE","DATA_DOACAO","LOGIN", "TIPO", "DESCRICAO");
 		$tabelas[0][0]="doacao";
 		$tabelas[0][1]=null;
 		$ordenacao = null;
@@ -34,6 +34,7 @@
 		$value_data_doacao = $linha["DATA_DOACAO"];
 		$selected_id_login = $linha["ID_LOGIN"];
 		$selected_tipo = $linha["ID_TIPO"];
+		$value_descricao = $linha["DESCRICAO"];
 		$disabled=true;
 		
 		$action = "altera.php?tabela=doacao";
@@ -45,6 +46,7 @@
 		$value_id_doacao = null;
 		$value_quantidade = null;
 		$selected_tipo = null;
+		$value_descricao = null;
 		
 		date_default_timezone_set('America/Sao_Paulo');
 		$value_data_doacao = date('d/m/Y H:i:s');
@@ -74,7 +76,10 @@
 		$f->add_input($v);
 	}
 	
-	$v = array("type"=>"text","name"=>"QUANTIDADE", "value"=>$value_quantidade);
+	$v = array("type"=>"text","name"=>"DESCRICAO","placeholder"=>"DESCRIÇÃO", "value"=>$value_descricao);
+	$f->add_input($v);
+
+	$v = array("type"=>"text","name"=>"QUANTIDADE","placeholder"=>"QUANTIDADE", "value"=>$value_quantidade);
 	$f->add_input($v);
 	
 	$v = array("type"=>"hidden","name"=>"DATA_DOACAO","value"=>$value_data_doacao);
@@ -200,7 +205,7 @@ $(function(){
 					
 					
 					//if ($.session.get('login')('id') == matriz[i].ID_LOGIN){
-						tr += "<td><button value='"+matriz[i].ID_POSTAGEM+"' class='remover'>Remover</button>";
+						tr += "<td><button value='"+matriz[i].ID_DOACAO+"' class='remover'>Remover</button>";
 					tr += "<button value='"+matriz[i].ID_DOACAO+"' class='alterar'>Alterar</button></td>";
 					tr += "</tr>";	
 					
@@ -222,7 +227,7 @@ $(function(){
 				$("input[name='ID_DOACAO']").val(dados.ID_DOACAO);
 				$("input[name='DESCRICAO']").val(dados.DESCRICAO);
 				$("input[name='QUANTIDADE']").val(dados.QUANTIDADE);
-				$("input[name='TIPO']").val(dados.TIPO);
+				$("select[name='TIPO']").val(dados.TIPO);
 				$("input[name='DATA_DOACAO']").val(dados.DATA_DOACAO);
 				$("input[name='ID_LOGIN']").val(dados.ID_LOGIN);
 				$(".cadastrar").attr("class","alterando");
@@ -239,7 +244,7 @@ $(function(){
 				data: {
 					ID_DOACAO: $("input[name='ID_DOACAO']").val(),
 					DESCRICAO: $("input[name='DESCRICAO']").val(),
-					QUANTIDADE: $("input[name='TIPO']").val(),
+					TIPO: $("select[name='TIPO']").val(),
 					QUANTIDADE: $("input[name='QUANTIDADE']").val(),
 					DATA_DOACAO: $("input[name='DATA_DOACAO']").val(),
 					ID_LOGIN: $("input[name='ID_LOGIN']").val()
@@ -256,7 +261,7 @@ $(function(){
 						$(".cadastrar").html("CADASTRAR");
 						$("input[name='ID_DOACAO']").val("");
 						$("input[name='DESCRICAO']").val("");
-						$("input[name='TIPO']").val("");
+						$("select[name='TIPO']").val("");
 						$("input[name='QUANTIDADE']").val("");
 						$("input[name='DATA_DOACAO']").val("");
 						$("input[name='ID_LOGIN']").val("");
@@ -281,10 +286,10 @@ $(function(){
 			data: {
 					ID_DOACAO: $("input[name='ID_DOACAO']").val(),
 					DESCRICAO: $("input[name='DESCRICAO']").val(),
-					QUANTIDADE: $("input[name='TIPO']").val(),
+					TIPO: $("select[name='TIPO']").val(),
 					QUANTIDADE: $("input[name='QUANTIDADE']").val(),
 					DATA_DOACAO: $("input[name='DATA_DOACAO']").val(),
-					ID_LOGIN: $("input[name='ID_LOGIN']").val()
+					ID_LOGIN: $("select[name='ID_LOGIN']").val()
 				 },
 			beforeSend:function(){
 				$("button").attr("disabled",true);

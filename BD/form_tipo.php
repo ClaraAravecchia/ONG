@@ -32,7 +32,6 @@
 		
 		$value_id_tipo = $linha["ID_TIPO"];
 		$value_tipo_doacao = $linha["TIPO_DOACAO"];
-		$selected_id_doacao = $linha["ID_DOACAO"];
 		$disabled=true;
 		
 		$action = "altera.php?tabela=tipo";
@@ -51,7 +50,7 @@
 	$v = array("action"=>"insere.php?tabela=tipo","method"=>"post");
 	$f = new Form($v);
 	
-	$v = array("type"=>"text","name"=>"ID_TIPO","placeholder"=>"ID DO TIPO DE DOACAO", "value"=>$value_id_tipo,"disabled"=>$disabled);
+	$v = array("type"=>"number","name"=>"ID_TIPO","placeholder"=>"ID DO TIPO", "value"=>$value_id_tipo,"disabled"=>$disabled);
 	$f->add_input($v);
 	
 	if($disabled){
@@ -59,11 +58,11 @@
 		$f->add_input($v);
 	}
 	
-	$v = array("type"=>"text","name"=>"TIPO_DOACAO", "value"=>$value_tipo_doacao);
+	$v = array("type"=>"text","name"=>"TIPO_DOACAO","placeholder"=>"TIPO DE DOACAO", "value"=>$value_tipo_doacao);
 	$f->add_input($v);
 	
-	$v = array("type"=>"button","texto"=>"ENVIAR");
-	$f->add_button($v);	
+	$v = array("type"=>"button","class"=>"cadastrar","texto"=>"CADASTRAR");
+	$f->add_button($v);
 ?>
 
 	<h3>Formulário - Inserir Tipo de Doação</h3>
@@ -90,6 +89,7 @@
 		echo "permissao=3;";
 	}
 ?>
+	pagina_atual = 1;
 	$(function(){
 		carrega_botoes();
 		
@@ -194,8 +194,8 @@
 					url:"altera.php?tabela=TIPO",
 					type: "post",
 					data: {
-						ID_RACA: $("input[name='ID_TIPO']").val(),
-                        NOME: $("input[name='TIPO_DOACAO']").val(),
+						ID_TIPO: $("input[name='ID_TIPO']").val(),
+                        TIPO_DOACAO: $("input[name='TIPO_DOACAO']").val(),
 					 },
 					beforeSend:function(){
 						$("button").attr("disabled",true);
@@ -223,13 +223,13 @@
 			
 			//defina a seguinte regra para o botao de envio
 			$(document).on("click",".cadastrar",function(){
-			
+			console.log("cadastrar");
 			$.ajax({
 				url: "insere.php?tabela=TIPO",
 				type: "post",
 				data: {
-						ID_RACA: $("input[name='ID_TIPO']").val(),
-                        NOME: $("input[name='TIPO_DOACAO']").val()
+						ID_TIPO: $("input[name='ID_TIPO']").val(),
+                        TIPO_DOACAO: $("input[name='TIPO_DOACAO']").val()
 					 },
 				beforeSend:function(){
 					$("button").attr("disabled",true);

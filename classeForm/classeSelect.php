@@ -26,7 +26,7 @@ class Select {//implements Exibicao{
 	public function exibe(){
 		
 		echo "<select name='$this->name'>
-			  <option>::selecione $this->label::</option>";
+			  <option value='null'>::selecione $this->label::</option>";
 		
 		foreach($this->lista_option as $o){
 			$o->exibe();

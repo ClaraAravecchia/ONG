@@ -45,7 +45,7 @@
         $value_nome = null;
         $value_idade = null;
         $value_observacao = null;
-        $selected_id_login = $_SESSION["login"]["id"];
+        $selected_id_login = null;;
         $selected_id_raca = null;
         $data_adocao = null;
 	}
@@ -59,6 +59,17 @@
 	
 	while($linha=$stmt->fetch()){
 		$raca[] = $linha;
+	}	
+	
+    /////////////////////		/////////////////////////		/////////////////
+    
+    $select = "SELECT ID_LOGIN AS value, NOME AS texto FROM LOGIN ORDER BY NOME";
+	
+	$stmt = $conexao->prepare($select);
+	$stmt->execute();
+	
+	while($linha=$stmt->fetch()){
+		$login[] = $linha;
 	}	
 	
     /////////////////////		/////////////////////////		/////////////////
@@ -83,8 +94,8 @@
     $v = array("type"=>"text","name"=>"OBSERVACAO","placeholder"=>"OBSERVAÇÃO...","value"=>$value_observacao);
     $f->add_input($v);
 	
-    $v = array("type"=>"hidden", "name"=>"ID_LOGIN", "value"=>$selected_id_login);
-	$f->add_input($v);
+    $v = array("name"=>"ID_LOGIN", "selected"=>$selected_id_login);
+	$f->add_select($v, $login);
 	
 	$v = array("name"=>"ID_RACA","selected"=>$selected_id_raca);
     $f->add_select($v,$raca );
@@ -308,7 +319,7 @@
 						}
 						else{
 							console.log(d);
-							$("#status").html("Animal Não Alterado! Código já existe!");
+							$("#status").html("Animal Não inserido! Código já existe!");
 							$("#status").css("color","red");
 						}
 					}

@@ -21,25 +21,26 @@
 						echo "<th>".$j."</th>";
 					}
 
-					if ($_SESSION["login"]["permissao"] == "1" || $_SESSION["login"]["permissao"] == "2"){
+					//if ($_SESSION["login"]["permissao"] == "1" || $_SESSION["login"]["permissao"] == "2"){
 						echo "<th>Ação</th>";
-					}
+					//}
 					
 					echo "</tr>";
 					echo "</thead>";
 					echo "<tbody>";
-				}
+				} 
 					echo "<tr>";
 					foreach($v as $j=>$d){
 						echo "<td>".$d."</td>";
 					}
-					if($_SESSION["login"]["permissao"]){
+					
 						echo "<td>
 							<button value='".$v["ID"]."' class='remover'>Remover</button>
 							<button value='".$v["ID"]."' class='alterar'>Alterar</button>
 							</td>";
 						echo "</tr>";
-					}
+					
+					
 			}
 			echo "</tbody>";
 			

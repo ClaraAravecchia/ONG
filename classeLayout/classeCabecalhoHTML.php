@@ -21,7 +21,7 @@
 					echo "| <a href='listar.php?t=$tabela'>$texto</a> ";
 				}
 				
-				if(isset($_SESSION["funcionario"]["permissao"])){
+				if(isset($_SESSION["login"]["permissao"])){
 					echo"| <a href='logout.php'>SAIR</a>";
 				}
 				

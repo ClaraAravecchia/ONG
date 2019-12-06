@@ -1,7 +1,27 @@
-	<?php
-		require_once ("../classeLayout/classeCabecalhoHTML.php");
-		require_once("cabecalho.php");
-	?>
+<?php
+	require_once ("../classeLayout/classeCabecalhoHTML.php");
+	require_once("cabecalho.php");
+?>
+
+<script>
+	function trocaImgAna(img){
+		//var img = document.getElementById("teste");
+		img.src="../imagens/anaChange.jpg";
+	}
+	function trocaImgEv(img){
+		//var img = document.getElementById("teste");
+		img.src="../imagens/evelynChange.jpg";
+	}
+	function ImgAna(img){
+		//var img = document.getElementById("teste");
+		img.src="../imagens/ana2.jpg";
+	}
+	function ImgEv(img){
+		//var img = document.getElementById("teste");
+		img.src="../imagens/evely2.jpg";
+	}
+	
+</script>
 
 	<section class="courses">
 		<hgroup>
@@ -18,15 +38,15 @@
 	<aside>
 		<section>
 			<h2>Criadoras da AAEC</h2>
-			<center><img src="../imagens/ana2.jpg" ></center>
-			<center><img src="../imagens/evely2.jpg" ></center>
+			<center><img id="ana" src="../imagens/ana2.jpg" onMouseOver="trocaImgAna(this);" onMouseOut="ImgAna(this)" ></center>
+			<center><img id="evelyn" src="../imagens/evely2.jpg" onMouseOver="trocaImgEv(this);" onMouseOut="ImgEv(this)"></center>
 			<center><button><a href="saibamais.php" target="_blank" >Saiba Mais</a></button></center>
 		</section>
 	</aside>
 
 	<footer>
 		&copy; 2019, AAEC<br/>
-		Adotamos um ao outro,  simples  assim: porque eu precisava dele  e ele de mim. (Alessandra Grani)
+		Adotamos um ao outro,  simples  assim: porque eu precisava dele e ele de mim. (Alessandra Grani)
 	</footer>
 
 </div>

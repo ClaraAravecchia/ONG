@@ -75,7 +75,7 @@
 			}
 			$insert .= ")";
 			
-			echo $insert;
+			
 			$stmt = $this->conexao->prepare($insert);
 			
 			foreach($campos as $indice=>$valor){
@@ -138,7 +138,7 @@
 				$sql .= " $limite";
 			}
 			
-			//die($sql);
+			die($sql);
 			$stmt = $this->conexao->prepare($sql);
 			
 			$stmt->execute();

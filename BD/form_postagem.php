@@ -94,6 +94,8 @@
 // 1: root
 // 2: veterinario
 // 3: usr
+
+
 if($_SESSION["login"]["permissao"] == 1){
 	echo "permissao=1;";
 }
@@ -103,12 +105,15 @@ else if($_SESSION["login"]["permissao"] == 2){
 else{
 	echo "permissao=3;";
 }
+
 ?>
 pagina_atual = 1;
+
 
 $(function(){
 	
 	carrega_botoes();
+	paginacao(1);
 	
 	function carrega_botoes(){
 		
@@ -172,7 +177,7 @@ $(function(){
 					tabelas:{
 								0:{0:"POSTAGEM",1:"LOGIN"}
 							},
-					colunas:{0:"ID_POSTAGEM",1:"TEXTO",2:"DATA_POSTAGEM",3:"LOGIN.NOME AS LOGIN"},
+					colunas:{0:"ID_POSTAGEM",1:"TEXTO",2:"DATA_POSTAGEM",3:"LOGIN.NOME AS LOGIN", 4:"LOGIN.ID_LOGIN AS ID_LOGIN"},
 					pagina: b
 				  },
 			success: function(matriz){
@@ -181,21 +186,62 @@ $(function(){
 				for(i=0;i<matriz.length;i++){
 					tr = "<tr>";
 					tr += "<td>"+matriz[i].ID_POSTAGEM+"</td>";
-					tr += "<td>"+matriz[i].LOGIN+"</td>";
+					tr += "<td value=>"+matriz[i].LOGIN+"</td>";
 					tr += "<td>"+matriz[i].TEXTO+"</td>";
 					tr += "<td>"+matriz[i].DATA_POSTAGEM+"</td>";
 					
+					tr += "<td>";
 					
-					//if ($.session.get('login')('id') == matriz[i].ID_LOGIN){
-						tr += "<td><button value='"+matriz[i].ID_POSTAGEM+"' class='remover'>Remover</button>";
-					tr += "<button value='"+matriz[i].ID_POSTAGEM+"' class='alterar'>Alterar</button></td>";
-					tr += "</tr>";	
+					if (<?php echo $_SESSION['login']['id']; ?> == matriz[i].ID_LOGIN){
+						tr += "<button value='"+matriz[i].ID_POSTAGEM+"' class='remover'>Remover</button>";
+						tr += "<button value='"+matriz[i].ID_POSTAGEM+"' class='alterar'>Alterar</button>";		
+					}	
+						
+					tr += "<button value='"+matriz[i].ID_POSTAGEM+"' class='mostrar'>Mostrar Comentarios</button>";				
+					tr += "</td></tr>";	
+					tr += "<tr id='rc"+matriz[i].ID_POSTAGEM+"' style='display:none'><td colspan='6'>";
+					tr += "<div id='c"+matriz[i].ID_POSTAGEM+"'></div> <button value='"+matriz[i].ID_POSTAGEM+"' class='comentar' style='display:block'>Comentar</button></td></tr>";
 					
-					
+					carrega_comentario(matriz[i].ID_POSTAGEM);
 					$("tbody").append(tr);
 				}
 			}
 		});
+	}
+
+	$(document).on("click", ".mostrar", function(){
+
+		b = $(this);
+	
+		c = "#rc"+b.val();
+		if(b.html() == "Mostrar Comentarios"){			
+			$(c).show();
+			$(".comentario").show();
+			b.html("Esconder Comentarios");
+			
+		}else{
+			$(c).hide();
+			$(".comentario").hide();
+			b.html("Mostrar Comentarios");
+		}
+
+		 
+	 });
+
+
+	function carrega_comentario(id_postagem){
+		console.log("carrega_comentario");
+		$.ajax({
+			url: "comentario.php",
+			type: "post",
+			data: {
+				FK: id_postagem
+			},
+			success: function(d){
+				$("#c"+id_postagem).html(d);
+			}
+		});
+		
 	}
 	
 	$(document).on("click",".alterar",function(){

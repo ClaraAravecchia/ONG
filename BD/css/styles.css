@@ -9,6 +9,7 @@ body {
 	font-family: Georgia, Times, serif;
 	line-height: 1.4em;
 	margin: 0 auto;
+	/*background: url("../../capa/background6.jpg"); *//*6 ou 3*/ 
 	}
 	
 .content {
@@ -127,7 +128,10 @@ aside section a:hover {
 	color: black;
 	background-color: #efefef;
 	}
-	
+
+p a{
+	color: #6495ED;
+}	
 a {
 	color: white;
 	text-decoration: none;

@@ -208,6 +208,20 @@ $(function(){
 			}
 		});
 	}
+	
+	$(document).on("click", ".comentario", function(){
+		var id_comentario = $(".comentario").val();
+		$.ajax({
+			url: "insere_comentario.php",
+			type: "post",
+			data: {
+				FK: id_comentario
+			},
+			success: function(d){
+				$("#c"+id_postagem).html(d);
+			}
+		});
+	});
 
 	$(document).on("click", ".mostrar", function(){
 

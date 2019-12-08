@@ -74,6 +74,7 @@
 				}
 			}
 			$insert .= ")";
+			die($insert);
 			
 			
 			$stmt = $this->conexao->prepare($insert);
@@ -138,7 +139,7 @@
 				$sql .= " $limite";
 			}
 			
-			die($sql);
+			//die($sql);
 			$stmt = $this->conexao->prepare($sql);
 			
 			$stmt->execute();

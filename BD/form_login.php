@@ -47,5 +47,9 @@ if(isset($_SESSION["msg_erro"])){
 <?php
 	$f->exibe();
 ?>
+
+<p>
+	Não possui uma conta? <a href="form_cadastro.php">Cadastre-se</a>
+</p>
 </body>
 </html> 

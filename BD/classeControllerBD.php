@@ -74,6 +74,7 @@
 				}
 			}
 			$insert .= ")";
+			//die($insert);
 			
 			
 			$stmt = $this->conexao->prepare($insert);

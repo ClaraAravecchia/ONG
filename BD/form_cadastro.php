@@ -137,10 +137,9 @@
 			success: function(d){
 				$("button").attr("disabled",false);
 				if(d=='1'){
-					$("#status").html("LOGIN inserido com sucesso!");
+					$("#status").html("LOGIN inserido com sucesso! <a href='form_login.php'>Logar</a>");
 					$("#status").css("color","green");
-					carrega_botoes();
-					paginacao(pagina_atual);
+					
 				}
 				else{
 					console.log(d);

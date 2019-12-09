@@ -133,6 +133,25 @@ if(isset($_GET["t"])){
 				$t[0][0] = "TIPO";
 				$t[0][1] = null;
 	}
+	else if($_GET["t"]=="historico_animal"){
+
+		$colunas = array(   
+							"HISTORICO_ATENDIMENTO.DATA_ATENDIMENTO AS DATA ATENDIMENTO",
+							"ANIMAL.NOME AS ANIMAL",
+							"VETERINARIO.NOME AS VETERINARIO",
+							"HISTORICO_ATENDIMENTO.MEDICACAO AS 'MEDICAÇÃO'",
+							"HISTORICO_ATENDIMENTO.OBSERVACAO AS 'OBSERVAÇÃO'"
+							
+						);
+				$t[0][0] = "CONSULTA";
+				$t[0][1] = "HISTORICO_ATENDIMENTO";
+				
+				$t[1][0] = "CONSULTA";
+				$t[1][1] = "ANIMAL";
+				
+				$t[2][0] = "CONSULTA";
+				$t[2][1] = "VETERINARIO";
+	}
 
 }
 ?>

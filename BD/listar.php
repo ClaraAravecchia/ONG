@@ -51,6 +51,9 @@
 	else if($_GET["t"]=="logout"){
 		require_once("logout.php");
 	}
+	else if($_GET["t"]=="historico_animal"){
+		require_once("historico_animal.php");
+	}
 
 	require_once("configuracoes_listar.php");
 

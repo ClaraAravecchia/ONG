@@ -10,7 +10,8 @@ UPDATE LOGIN SET ID_PERMISSAO = 4 WHERE ID_LOGIN = NEW.ID_LOGIN;
 END IF;
 END;//
 DELIMITER ; 
-							
+
+/*							
 INSERT INTO ANIMAL VALUES(1001, 'Snoop', 2, NULL, 'Vem com um passarinho de brinde', NULL, 100, NULL);
 
 SELECT * FROM  ANIMAL WHERE ID_LOGIN IS NOT NULL AND DATA_ADOCAO IS NULL;
@@ -25,3 +26,4 @@ SELECT * FROM LOGIN;
 
 INSERT INTO LOGIN VALUES(3, 'Dumbledore', 424242, 'Hogwarts', '(16)99999999', 'dumbledore@gmail.com', 3);
 
+*/

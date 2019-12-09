@@ -200,7 +200,8 @@ $(function(){
 					tr += "<button value='"+matriz[i].ID_POSTAGEM+"' class='mostrar'>Mostrar Comentarios</button>";				
 					tr += "</td></tr>";	
 					tr += "<tr id='rc"+matriz[i].ID_POSTAGEM+"' style='display:none'><td colspan='6'>";
-					tr += "<div id='c"+matriz[i].ID_POSTAGEM+"'></div> <button value='"+matriz[i].ID_POSTAGEM+"' class='comentar' style='display:block'>Comentar</button></td></tr>";
+					tr += "<div id='c"+matriz[i].ID_POSTAGEM+"'></div>";
+					tr += "<div id='input"+matriz[i].ID_POSTAGEM+"'></div><button value='"+matriz[i].ID_POSTAGEM+"' class='comentar' style='display:block'>Comentar</button></td></tr>";
 					
 					carrega_comentario(matriz[i].ID_POSTAGEM);
 					$("tbody").append(tr);
@@ -209,16 +210,17 @@ $(function(){
 		});
 	}
 	
-	$(document).on("click", ".comentario", function(){
-		var id_comentario = $(".comentario").val();
+	$(document).on("click", ".comentar", function(){
+		console.log("botao");
+		var id_postagem = $(".comentar").val();
 		$.ajax({
 			url: "insere_comentario.php",
 			type: "post",
 			data: {
-				FK: id_comentario
+				ID_POSTAGEM: id_postagem
 			},
 			success: function(d){
-				$("#c"+id_postagem).html(d);
+				$("#input"+id_postagem).html(d);
 			}
 		});
 	});
@@ -339,6 +341,36 @@ $(function(){
 				else{
 					console.log(d);
 					$("#status").html("Postagem Não Alterada! Código já existe!");
+					$("#status").css("color","red");
+				}
+			}
+		});
+	});
+	
+	$(document).on("click",".cadastra_comentario",function(){
+		$.ajax({
+			url: "insere.php?tabela=COMENTARIO",
+			type: "post",
+			data: {
+					ID_COMENTARIO: $("input[name='ID_COMENTARIO']").val(),
+					TEXTO: $("input[name='TEXTO']").val(),
+					DATA_COMENTARIO: $("input[name='DATA_COMENTARIO']").val(),
+					ID_POSTAGEM: $("input[name='ID_POSTAGEM']").val()
+				 },
+			beforeSend:function(){
+				$("button").attr("disabled",true);
+			},
+			success: function(d){
+				$("button").attr("disabled",false);
+				if(d=='1'){
+					$("#status").html("Comentário inserido com sucesso!");
+					$("#status").css("color","green");
+					carrega_botoes();
+					paginacao(pagina_atual);
+				}
+				else{
+					console.log(d);
+					$("#status").html("Comentário Não inserido! Código já existe!");
 					$("#status").css("color","red");
 				}
 			}

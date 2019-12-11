@@ -1,8 +1,8 @@
 <?php error_reporting(-1);
 
     ini_set("display_errors", 1); 
-	//include("../classeLayout/classeCabecalhoHTML.php");
-	//include("cabecalho.php");
+	require_once("../classeLayout/classeCabecalhoHTML.php");
+	require_once("cabecalho.php");
 	
 	require_once("../classeForm/InterfaceExibicao.php");
 	require_once("../classeForm/classeInput.php");
@@ -10,19 +10,19 @@
 	require_once("../classeForm/classeSelect.php");
 	require_once("../classeForm/classeForm.php");
 	require_once("../classeForm/classeButton.php");
-
-	include("conexao.php");
 	
 	//////////////		//////////////////		//////////////////
 	
 	if (isset($_POST["id"])) {
 		require_once("classeControllerBD.php");
+		require_once("conexao.php");
 		
 		$c = new ControllerBD($conexao);
+		$colunas=array("ID_DOACAO","DESCRICAO","QUANTIDADE","DATA_DOACAO","ID_LOGIN", "ID_TIPO");
 		
-		$colunas=array("ID_DOACAO","QUANTIDADE","DATA_DOACAO","LOGIN", "TIPO", "DESCRICAO");
 		$tabelas[0][0]="doacao";
 		$tabelas[0][1]=null;
+		
 		$ordenacao = null;
 		$condicao = $_POST["id"];
 		
@@ -30,27 +30,25 @@
 		$linha = $stmt->fetch(PDO::FETCH_ASSOC);
 		
 		$value_id_doacao = $linha["ID_DOACAO"];
+		$value_descricao = $linha["DESCRICAO"];
 		$value_quantidade = $linha["QUANTIDADE"];
 		$value_data_doacao = $linha["DATA_DOACAO"];
 		$selected_id_login = $linha["ID_LOGIN"];
 		$selected_tipo = $linha["ID_TIPO"];
-		$value_descricao = $linha["DESCRICAO"];
 		$disabled=true;
 		
 		$action = "altera.php?tabela=doacao";
 	}
-	
 	else{
 		$disabled = false;
 		$action = "insere.php?tabela=doacao";
 		$value_id_doacao = null;
+		$value_descricao = null;
 		$value_quantidade = null;
 		$selected_tipo = null;
-		$value_descricao = null;
-		
 		date_default_timezone_set('America/Sao_Paulo');
-		$value_data_doacao = date('d/m/Y H:i:s');
-		$selected_id_login = $_SESSION["login"]["id"];
+		$value_data_doacao = date('Y-m-d');
+		$selected_id_login = null;
 	}
 	
 	//////////////		//////////////////		//////////////
@@ -61,7 +59,18 @@
 	
 	while($linha=$stmt->fetch()){
 		$tipo[] = $linha;
-	}	
+	}
+	
+	/////////////////////		/////////////////////////		/////////////////
+    
+    $select = "SELECT ID_LOGIN AS value, NOME AS texto FROM LOGIN ORDER BY NOME";
+	
+	$stmt = $conexao->prepare($select);
+	$stmt->execute();
+	
+	while($linha=$stmt->fetch()){
+		$login[] = $linha;
+	}
 	
     /////////////////////////////////////////////////////////////////////////
 	
@@ -85,17 +94,18 @@
 	$v = array("type"=>"hidden","name"=>"DATA_DOACAO","value"=>$value_data_doacao);
 	$f->add_input($v);
 	
-	$v = array("type"=>"hidden", "name"=>"ID_LOGIN", "value"=>$selected_id_login);
-	$f->add_input($v);
+	$v = array("name"=>"ID_LOGIN", "selected"=>$selected_id_login);
+	$f->add_select($v, $login);
 	
 	$v = array("name"=>"TIPO","selected"=>$selected_tipo);
     $f->add_select($v, $tipo);
 	
-	$v = array("type"=>"button","texto"=>"ENVIAR");
-	$f->add_button($v);	
+	
+	$v = array("type"=>"button","class"=>"cadastrar","texto"=>"CADASTRAR");
+	$f->add_button($v);
 ?>
 
-<h3>Formulário - Inserir Doação</h3>
+<h3>Inserir Doação</h3>
 <div id="status"></div>
 
 <hr />
@@ -150,7 +160,7 @@ $(function(){
 			type: "post",
 			data: {
 				id: id_remover,
-				tabela: "POSTAGEM"
+				tabela: "DOACAO"
 			},
 			success: function(d){
 				if(d == 1){
@@ -188,7 +198,7 @@ $(function(){
 								0:{0:"DOACAO",1:"LOGIN"},
 								1:{0:"DOACAO",1:"TIPO"}
 							},
-					colunas:{0:"ID_DOACAO",1:"DESCRICAO",2:"QUANTIDADE", 3:"DATA_DOACAO", 4:"LOGIN.NOME AS LOGIN", 5:"TIPO.DESCRICAO AS TIPO"},
+					colunas:{0:"ID_DOACAO",1:"DESCRICAO",2:"QUANTIDADE", 3:"TIPO.DESCRICAO AS TIPO", 4:"DATA_DOACAO", 5:"LOGIN.NOME AS LOGIN"},
 					pagina: b
 				  },
 			success: function(matriz){
@@ -197,18 +207,16 @@ $(function(){
 				for(i=0;i<matriz.length;i++){
 					tr = "<tr>";
 					tr += "<td>"+matriz[i].ID_DOACAO+"</td>";
-					tr += "<td>"+matriz[i].LOGIN+"</td>";
 					tr += "<td>"+matriz[i].DESCRICAO+"</td>";
-					tr += "<td>"+matriz[i].TIPO+"</td>";
 					tr += "<td>"+matriz[i].QUANTIDADE+"</td>";
+					tr += "<td>"+matriz[i].TIPO+"</td>";
 					tr += "<td>"+matriz[i].DATA_DOACAO+"</td>";
-					
+					tr += "<td>"+matriz[i].LOGIN+"</td>";
 					
 					//if ($.session.get('login')('id') == matriz[i].ID_LOGIN){
-						tr += "<td><button value='"+matriz[i].ID_DOACAO+"' class='remover'>Remover</button>";
+					tr += "<td><button value='"+matriz[i].ID_DOACAO+"' class='remover'>Remover</button>";
 					tr += "<button value='"+matriz[i].ID_DOACAO+"' class='alterar'>Alterar</button></td>";
-					tr += "</tr>";	
-					
+					tr += "</tr>";
 					
 					$("tbody").append(tr);
 				}
@@ -222,14 +230,14 @@ $(function(){
 		$.ajax({
 			url: "get_dados_form.php",
 			type: "post",
-			data: {id: id_alterar, tabela: "POSTAGEM"},
+			data: {id: id_alterar, tabela: "DOACAO"},
 			success: function(dados){
 				$("input[name='ID_DOACAO']").val(dados.ID_DOACAO);
 				$("input[name='DESCRICAO']").val(dados.DESCRICAO);
 				$("input[name='QUANTIDADE']").val(dados.QUANTIDADE);
-				$("select[name='TIPO']").val(dados.TIPO);
+				$("select[name='TIPO']").val(dados.ID_TIPO);
 				$("input[name='DATA_DOACAO']").val(dados.DATA_DOACAO);
-				$("input[name='ID_LOGIN']").val(dados.ID_LOGIN);
+				$("select[name='ID_LOGIN']").val(dados.ID_LOGIN);
 				$(".cadastrar").attr("class","alterando");
 				$(".alterando").html("ALTERAR");
 			}
@@ -239,15 +247,15 @@ $(function(){
 		$(document).on("click",".alterando",function(){
 			
 			$.ajax({
-				url:"altera.php?tabela=POSTAGEM",
+				url:"altera.php?tabela=DOACAO",
 				type: "post",
 				data: {
 					ID_DOACAO: $("input[name='ID_DOACAO']").val(),
 					DESCRICAO: $("input[name='DESCRICAO']").val(),
-					TIPO: $("select[name='TIPO']").val(),
 					QUANTIDADE: $("input[name='QUANTIDADE']").val(),
+					ID_TIPO: $("select[name='TIPO']").val(),
 					DATA_DOACAO: $("input[name='DATA_DOACAO']").val(),
-					ID_LOGIN: $("input[name='ID_LOGIN']").val()
+					ID_LOGIN: $("select[name='ID_LOGIN']").val()
 				 },
 				beforeSend:function(){
 					$("button").attr("disabled",true);
@@ -255,16 +263,16 @@ $(function(){
 				success: function(d){
 					$("button").attr("disabled",false);
 					if(d=='1'){
-						$("#status").html("Postagem Alterada com sucesso!");
+						$("#status").html("Doação Alterada com sucesso!");
 						$("#status").css("color","green");
 						$(".alterando").attr("class","cadastrar");
 						$(".cadastrar").html("CADASTRAR");
 						$("input[name='ID_DOACAO']").val("");
 						$("input[name='DESCRICAO']").val("");
-						$("select[name='TIPO']").val("");
 						$("input[name='QUANTIDADE']").val("");
+						$("select[name='TIPO']").val("");
 						$("input[name='DATA_DOACAO']").val("");
-						$("input[name='ID_LOGIN']").val("");
+						$("select[name='ID_LOGIN']").val("");
 						
 						paginacao(pagina_atual);
 					}
@@ -279,40 +287,38 @@ $(function(){
 		
 		//defina a seguinte regra para o botao de envio
 		$(document).on("click",".cadastrar",function(){
-		
-		$.ajax({
-			url: "insere.php?tabela=POSTAGEM",
-			type: "post",
-			data: {
-					ID_DOACAO: $("input[name='ID_DOACAO']").val(),
-					DESCRICAO: $("input[name='DESCRICAO']").val(),
-					TIPO: $("select[name='TIPO']").val(),
-					QUANTIDADE: $("input[name='QUANTIDADE']").val(),
-					DATA_DOACAO: $("input[name='DATA_DOACAO']").val(),
-					ID_LOGIN: $("select[name='ID_LOGIN']").val()
-				 },
-			beforeSend:function(){
-				$("button").attr("disabled",true);
-			},
-			success: function(d){
-				$("button").attr("disabled",false);
-				if(d=='1'){
-					$("#status").html("Doação inserida com sucesso!");
-					$("#status").css("color","green");
-					carrega_botoes();
-					paginacao(pagina_atual);
+			$.ajax({
+				url: "insere.php?tabela=DOACAO",
+				type: "post",
+				data: {
+						ID_DOACAO: $("input[name='ID_DOACAO']").val(),
+						DESCRICAO: $("input[name='DESCRICAO']").val(),
+						QUANTIDADE: $("input[name='QUANTIDADE']").val(),
+						ID_TIPO: $("select[name='TIPO']").val(),
+						DATA_DOACAO: $("input[name='DATA_DOACAO']").val(),
+						ID_LOGIN: $("select[name='ID_LOGIN']").val()
+					 },
+				beforeSend:function(){
+					$("button").attr("disabled",true);
+				},
+				success: function(d){
+					$("button").attr("disabled",false);
+					if(d=='1'){
+						$("#status").html("Doação inserida com sucesso!");
+						$("#status").css("color","green");
+						carrega_botoes();
+						paginacao(pagina_atual);
+					}
+					else{
+						console.log(d);
+						$("#status").html("Doação Não Inserida! Código já existe!");
+						$("#status").css("color","red");
+					}
 				}
-				else{
-					console.log(d);
-					$("#status").html("Doação Não Inserida! Código já existe!");
-					$("#status").css("color","red");
-				}
-			}
+			});
 		});
 	});
-	
-		});
-		</script>
-	</body>
+</script>
+</body>
 </html>
 </html>

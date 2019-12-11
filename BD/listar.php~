@@ -54,6 +54,8 @@
 	else if($_GET["t"]=="historico_animal"){
 		require_once("historico_animal.php");
 	}
+	
+	if($_GET["t"]=="historico_animal"){
 
 	require_once("configuracoes_listar.php");
 
@@ -69,5 +71,5 @@
 	//var_dump($t);
 	//var_dump($colunas);
 	$t = new Tabela($matriz,$t[0][0]);
-	$t->exibe();
+	$t->exibe();}
 ?>

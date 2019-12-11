@@ -202,7 +202,8 @@
 								0:{0:"ANIMAL", 1:"RACA"},
 								1:{0:"ANIMAL", 1:"LOGIN"}
 								},	
-							colunas:{0:"ID_ANIMAL",1:"ANIMAL.NOME as NOME",2:"IDADE",3:"OBSERVACAO",4:"LOGIN.NOME as LOGIN",5:"RACA.NOME AS RACA", 6:"DATA_ADOCAO"},
+							colunas:{0:"ID_ANIMAL",1:"ANIMAL.NOME as NOME",2:"IDADE",3:"OBSERVACAO",
+									4:"LOGIN.NOME as LOGIN",5:"RACA.NOME AS RACA", 6:"DATA_ADOCAO"},
 							pagina: b
 						  },
 					success: function(matriz){
@@ -292,19 +293,25 @@
 				
 				//defina a seguinte regra para o botao de envio
 				$(document).on("click",".cadastrar",function(){
+				vetor = {};
+				vetor["ID_ANIMAL"] = $("input[name='ID_ANIMAL']").val();
+				vetor["NOME"] = $("input[name='NOME']").val();
+				vetor["IDADE"] =  $("input[name='IDADE']").val();
+				vetor["OBSERVACAO"] =  $("input[name='OBSERVACAO']").val();
+				vetor["ID_RACA"] =  $("select[name='ID_RACA']").val();
+				
+				if($("select[name='ID_LOGIN']").val() != ''){
+					vetor["ID_LOGIN"] = $("select[name='ID_LOGIN']").val();
+				}
+				
+				if($("input[name='DATA_ADOCAO']").val() != ''){
+					vetor["DATA_ADOCAO"] =  $("input[name='DATA_ADOCAO']").val();
+				}
 				
 				$.ajax({
 					url: "insere.php?tabela=ANIMAL",
 					type: "post",
-					data: {
-							ID_ANIMAL: $("input[name='ID_ANIMAL']").val(),
-							NOME: $("input[name='NOME']").val(),
-							IDADE: $("input[name='IDADE']").val(),
-							OBSERVACAO: $("input[name='OBSERVACAO']").val(),
-							ID_LOGIN: $("select[name='ID_LOGIN']").val(),
-							ID_RACA: $("select[name='ID_RACA']").val(),
-							DATA_ADOCAO: $("input[name='DATA_ADOCAO']").val()
-						 },
+					data: vetor,
 					beforeSend:function(){
 						$("button").attr("disabled",true);
 					},

@@ -200,10 +200,17 @@ $(function(){
 					tr += "<button value='"+matriz[i].ID_POSTAGEM+"' class='mostrar'>Mostrar Comentarios</button>";				
 					tr += "</td></tr>";	
 					tr += "<tr id='rc"+matriz[i].ID_POSTAGEM+"' style='display:none'><td colspan='6'>";
-					tr += "<div id='c"+matriz[i].ID_POSTAGEM+"'></div>";
-					tr += "<div id='input"+matriz[i].ID_POSTAGEM+"'></div><button value='"+matriz[i].ID_POSTAGEM+"' id='comentar' style='display:block'>Comentar</button></td></tr>";
+					tr += "<hr /><div id='c"+matriz[i].ID_POSTAGEM+"'></div>";
+
 					
-					carrega_comentario(matriz[i].ID_POSTAGEM);
+					
+					tr += "<hr />";
+					
+					
+					tr += "<div id='input"+matriz[i].ID_POSTAGEM+"'></div><button value='"+matriz[i].ID_POSTAGEM+"' class='comentar' style='display:block'>Comentar</button></td></tr>";
+					
+					
+					carrega_comentario(matriz[i].ID_POSTAGEM, matriz[i].ID_LOGIN);
 					$("tbody").append(tr);
 				}
 			}
@@ -211,8 +218,8 @@ $(function(){
 	}
 	
 	$(document).on("click", ".comentar", function(){
-		console.log("botao");
-		var id_postagem = $(".comentar").val();
+		var id_postagem = $(this).val();
+		console.log(id_postagem);
 		$.ajax({
 			url: "insere_comentario.php",
 			type: "post",
@@ -245,13 +252,14 @@ $(function(){
 	 });
 
 
-	function carrega_comentario(id_postagem){
+	function carrega_comentario(id_postagem, id_login){
 		console.log("carrega_comentario");
 		$.ajax({
 			url: "comentario.php",
 			type: "post",
 			data: {
-				FK: id_postagem
+				FK: id_postagem,
+				ID_LOGIN: id_login
 			},
 			success: function(d){
 				$("#c"+id_postagem).html(d);
@@ -298,7 +306,7 @@ $(function(){
 						$("#status").html("Postagem Alterada com sucesso!");
 						$("#status").css("color","green");
 						$(".alterando").attr("class","cadastrar");
-						$(".cadastrar").html("CADASTRAR");
+						$(".cadastrar").html("POSTAR");
 						$("input[name='ID_POSTAGEM']").val("");
 						$("input[name='TEXTO']").val("");
 						$("input[name='DATA_POSTAGEM']").val("");
@@ -353,9 +361,10 @@ $(function(){
 			type: "post",
 			data: {
 					ID_COMENTARIO: $("input[name='ID_COMENTARIO']").val(),
-					TEXTO: $("input[name='TEXTO']").val(),
+					TEXTO: $("input[name='TEXTO_COMENTARIO']").val(),
 					DATA_COMENTARIO: $("input[name='DATA_COMENTARIO']").val(),
-					ID_POSTAGEM: $("input[name='ID_POSTAGEM']").val()
+					ID_POSTAGEM: $("input[name='ID_POSTAGEM_COMENTARIO']").val(),
+					ID_LOGIN: $("input[name='ID_LOGIN_COMENTARIO']").val()
 				 },
 			beforeSend:function(){
 				$("button").attr("disabled",true);
@@ -371,6 +380,103 @@ $(function(){
 				else{
 					console.log(d);
 					$("#status").html("Comentário Não inserido! Código já existe!");
+					$("#status").css("color","red");
+				}
+			}
+		});
+	});
+	
+	$(document).on("click", ".remover_comentario", function(){
+		id_remover = $(this).val();
+
+		$.ajax({
+			url: "remover.php",
+			type: "post",
+			data: {
+				id: id_remover,
+				tabela: "COMENTARIO"
+			},
+			success: function(d){
+				console.log(d);
+				if(d == 1){
+					$("#status").html("Removido com sucesso");
+					carrega_botoes();
+					qtd = $("tbody tr").length;
+					if(qtd == "1"){
+						pagina_atual--;
+					}
+					paginacao(pagina_atual);
+				}
+				else if(d == '0'){
+						$('#status').html("Você não tem permissão para remover.")
+				}
+				else if(d == "-1"){
+					$('#status').html("Você não está logado.")
+				}
+			}
+		});
+	});
+	
+	$(document).on("click",".alterar_comentario",function(){
+		id_alterar = $(this).val();	
+		id_postagem = $("#id_post"+id_alterar).attr("value");		
+		console.log(id_postagem);
+		$.ajax({
+			url: "get_dados_form.php",
+			type: "post",
+			data: {id: id_alterar, tabela: "COMENTARIO"},
+			success: function(dados){
+				$.ajax({
+					url: "insere_comentario.php",
+					type: "post",
+					data: {
+						ID_POSTAGEM: id_postagem
+					},
+					success: function(d){
+						$("#input"+id_postagem).html(d);
+						$("input[name='ID_COMENTARIO']").val(dados.ID_COMENTARIO);
+						$("input[name='TEXTO_COMENTARIO']").val(dados.TEXTO);
+						$("input[name='ID_POSTAGEM_COMENTARIO']").val(dados.ID_POSTAGEM);
+						$(".cadastra_comentario").attr("class","alterando_comentario");
+						$(".alterando_comentario").html("ALTERAR");		
+						console.log(dados);				
+					}
+				});
+			}
+		});
+	});
+	
+		
+		
+	$(document).on("click",".alterando_comentario",function(){
+		$.ajax({
+			url:"altera.php?tabela=COMENTARIO",
+			type: "post",
+			data: {
+				ID_COMENTARIO: $("input[name='ID_COMENTARIO']").val(),
+				TEXTO: $("input[name='TEXTO_COMENTARIO']").val(),
+				DATA_COMENTARIO: $("hidden[name='DATA_COMENTARIO']").val(),
+				ID_POSTAGEM: $("input[name='ID_POSTAGEM_COMENTARIO']").val()
+			 },
+			beforeSend:function(){
+				$("button").attr("disabled",true);
+			},
+			success: function(d){
+				$("button").attr("disabled",false);
+				if(d=='1'){
+					$("#status").html("Comentário Alterado com sucesso!");
+					$("#status").css("color","green");
+					$(".alterando_comentario").attr("class","cadastra_comentario");
+					$(".cadastra_comentario").html("CADASTRAR");
+					$("input[name='ID_COMENTARIO']").val("");
+					$("input[name='TEXTO']").val("");
+					//$("hidden[name='DATA_COMENTARIO']").val("");
+					
+					paginacao(pagina_atual);
+				}
+				else{
+					console.log(d);
+					$("#status").html("Comentário Não Alterado! Código já existe!");
 					$("#status").css("color","red");
 				}
 			}

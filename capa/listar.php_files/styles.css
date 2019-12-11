@@ -3,13 +3,13 @@ header, section, footer, aside, nav, article, figure {
 	
 body {
 	color: black;
-	/*background-color: #6495ED;*/
+	background-color: #6495ED;
 	background-attachment: fixed;
 	background-position: center;
 	font-family: Georgia, Times, serif;
 	line-height: 1.4em;
 	margin: 0 auto;
-	background: url("../../capa/background6.jpg"); /*6 ou 3*/ 
+	/*background: url("../../capa/background6.jpg"); *//*6 ou 3*/ 
 	}
 	
 .content {
@@ -22,7 +22,7 @@ body {
 header {
 	height: 262px;
 	width: 940px;
-	background-image: url("../../capa/header.jpg");
+	background-image: url("../../capa/capa2.jpg");
 	}
 	
 h1 {

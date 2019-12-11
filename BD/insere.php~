@@ -13,8 +13,4 @@
 		$c->inserir($_POST,$_GET["tabela"]) or die("0");
 		echo "1";
 	}
-	
-	/*else{
-		header("location: form_pais.php");
-	}*/
 ?>

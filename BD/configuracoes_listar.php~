@@ -106,7 +106,8 @@ if(isset($_GET["t"])){
 		$colunas = array(   "ID_COMENTARIO as ID",
 							"COMENTARIO.TEXTO as 'CONTEÚDO'",
 							"DATA_COMENTARIO as 'DATA'",
-							"POSTAGEM.TEXTO as 'POSTAGEM'"
+							"POSTAGEM.TEXTO as 'POSTAGEM'",
+							"ID_LOGIN AS ID_LOGIN"
 						);
 				$t[0][0] = "COMENTARIO";
 				$t[0][1] = "POSTAGEM ";
@@ -135,13 +136,13 @@ if(isset($_GET["t"])){
 	}
 	else if($_GET["t"]=="historico_animal"){
 
-		$colunas = array(   "ID_HISTORICO_ATENDIMENTO as ID",
+		$colunas = array(
+							"ID_HISTORICO_ATENDIMENTO as ID",   
 							"HISTORICO_ATENDIMENTO.DATA_ATENDIMENTO AS DATA ATENDIMENTO",
 							"ANIMAL.NOME AS ANIMAL",
 							"VETERINARIO.NOME AS VETERINARIO",
 							"HISTORICO_ATENDIMENTO.MEDICACAO AS 'MEDICAÇÃO'",
-							"HISTORICO_ATENDIMENTO.OBSERVACAO AS 'OBSERVAÇÃO'"
-							
+							"HISTORICO_ATENDIMENTO.OBSERVACAO AS 'OBSERVAÇÃO'"	
 						);
 				$t[0][0] = "CONSULTA";
 				$t[0][1] = "HISTORICO_ATENDIMENTO";
@@ -149,8 +150,7 @@ if(isset($_GET["t"])){
 				$t[1][0] = "CONSULTA";
 				$t[1][1] = "ANIMAL";
 				
-				$t[2][0] = "CONSULTA";
-				$t[2][1] = "VETERINARIO";
+
 	}
 
 }

@@ -30,11 +30,15 @@
 			
 			$stmt= $this->conexao->prepare($update);
 			
+			//print_r($coluna);
+			//print_r($campos);
+			//die();
+			
 			foreach($campos as $coluna=>$valor){
 				$stmt->bindValue(":$coluna",$valor);
 			}
 			$stmt->bindValue(":id_$tabela",$campos[strtoupper("id_$tabela")]);
-			
+			//print_r($stmt);
 			$stmt->execute();
 			
 			return(true);
@@ -42,12 +46,18 @@
 		
 		public function remover($id,$tabela){
 			$delete = "DELETE FROM $tabela WHERE id_$tabela=:id";
+			
+			//if($_SESION["login"]["permissao"] == 3 || $tabela == "postagem"){
+				//$delete .= " AND ID_LOGIN = ".$_SESION["login"]["id"];
+			//}
 			$stmt = $this->conexao->prepare($delete);
 			$stmt->bindValue(":id",$id);
 			$stmt->execute();
 		}
 		
 		public function inserir($campos,$tabela){
+			
+			//print_r($campos);
 			
 			$insert = "INSERT INTO $tabela (";
 			$i=0;
@@ -83,7 +93,7 @@
 				$stmt->bindValue(":".$indice,$valor);
 			}
 			$r = $stmt->execute();
-		
+
 			return($r);
 			//echo "Cadastrado com sucesso";
 		}
@@ -108,7 +118,7 @@
 					if($i==0){
 						$sql .= $v[0];
 					}
-					$sql .= " INNER JOIN ".$v[1];
+					$sql .= " LEFT JOIN ".$v[1];
 					$sql .= " ON 
 						".$v[0].".ID_".$v[1]."=".$v[1].".ID_".$v[1];
 				}

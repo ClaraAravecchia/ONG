@@ -31,6 +31,8 @@
 		$action = "altera.php?tabela=historico_atendimento";
 		$selected_id_animal = $linha["ID_ANIMAL"];
         $disabled = true;
+		
+
 	}
 	else{
         $disabled = false;
@@ -176,7 +178,7 @@ pagina_atual = 1;
 						tabelas:{
 									0:{0:"HISTORICO_ATENDIMENTO",1:"ANIMAL"}
 								},
-						colunas:{0:"ID_HISTORICO_ATENDIMENTO",1:"DATA_ATENDIMENTO",2:"MEDICACAO",3:"HISTORICO_ATENDIMENTO.OBSERVACAO", 4:"ANIMAL.NOME AS ANIMAL"}, 
+						colunas:{0:"ID_HISTORICO_ATENDIMENTO",1:"ANIMAL.NOME AS ANIMAL",2:"DATA_ATENDIMENTO",3:"MEDICACAO", 4:"HISTORICO_ATENDIMENTO.OBSERVACAO"}, 
 						pagina: b
 					  },
 				success: function(matriz){
@@ -207,7 +209,7 @@ pagina_atual = 1;
 				data: {id: id_alterar, tabela: "HISTORICO_ATENDIMENTO"},
 				success: function(dados){
 					$("input[name='ID_HISTORICO_ATENDIMENTO']").val(dados.ID_HISTORICO_ATENDIMENTO);
-					$("select[name='ID_ANIMAL']").val(dados.ANIMAL);
+					$("select[name='ID_ANIMAL']").val(dados.ID_ANIMAL);
 					$("input[name='DATA_ATENDIMENTO']").val(dados.DATA_ATENDIMENTO);
 					$("input[name='MEDICACAO']").val(dados.MEDICACAO);
 					$("input[name='OBSERVACAO']").val(dados.OBSERVACAO);
